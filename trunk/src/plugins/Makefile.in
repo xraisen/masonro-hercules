@@ -13,7 +13,13 @@
 #                                                                    #
 # Note: DO NOT include the .c extension!!!                           #
 
-MYPLUGINS = 
+MYPLUGINS = identifyall
+MYPLUGINS = autobuyammo
+MYPLUGINS = autopots
+MYPLUGINS = autoattack
+MYPLUGINS = identifyall
+MYPLUGINS = manners
+MYPLUGINS = storeit
 
 #                                                                    #
 #########  DO NOT EDIT ANYTHING BELOW THIS LINE!!!  ##################

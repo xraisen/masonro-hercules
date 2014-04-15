@@ -1,0 +1,13 @@
+-	script	autobuyammo_atcommand	-1,{
+OnInit:
+	bindatcmd "autobuyammo",strnpcinfo(3)+"::OnDo";
+	end;
+OnDo:
+	set @SP_AUTOBUYAMMO_GODD,!@SP_AUTOBUYAMMO_GODD;
+	if( @SP_AUTOBUYAMMO_GODD )
+		dispbottom "Auto-buy ammo [ON]";
+	else
+		dispbottom "Auto-buy ammo [OFF]";
+	end;
+
+}

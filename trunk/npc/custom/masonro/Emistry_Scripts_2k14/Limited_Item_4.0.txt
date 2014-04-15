@@ -1,0 +1,151 @@
+
+
+
+-	script	Limited Items	-1,{
+function AddLimitedItem;
+
+OnInit:
+// GM Level to Bypass
+.GM_Level = 99;
+// Check Every X Seconds
+.check_delay = 5;
+// Apply on Which Maps and what Zone No.
+setarray .Map$, // "<mapname>","<zone number>",
+	"guild_vs1","0",
+	"guild_vs2","1",
+	"guild_vs3","2",
+	"guild_vs4","3",
+	"guild_vs5","4";
+
+// Initialize Mapflags
+set .map_size,getarraysize( .Map$ );
+for( .@i = 0; .@i < .map_size; .@i += 2 ){
+	setmapflag .Map$[.@i],mf_loadevent;
+	set .map_menu$,.map_menu$ + "^0055FF[Zone "+.Map$[.@i+1]+"]^000000" + .Map$[.@i] +":";
+}
+
+// Zone List + Limited Items for each zone. (max 63 item per zone)
+// AddLimitedItem( <zone>,<item>,<limit>,..,<item>,<limit> );
+AddLimitedItem( 0,4049,2 );
+AddLimitedItem( 1,607,2,608,3,4002,1 );
+AddLimitedItem( 2,607,5,608,1,4002,1,5022,1 );
+AddLimitedItem( 3,607,1,608,0,5022,-2,7227,1,4002,1 );
+AddLimitedItem( 4,607,1,608,0,5022,-2,7227,1,4002,1 );
+end;
+
+OnTalk:
+	mes "Please select a Map.";
+	next;
+	.@i = select( .map_menu$ ) - 1;
+	.@zone = atoi( .Map$[ 1 + ( .@i * 2 ) ] );
+	mes "[Zone : "+.@zone+"] "+.Map$[ .@i * 2 ];
+
+	copyarray .@limit_item[0],getd( ".zone_"+.@zone+"[0]" ),getarraysize( getd( ".zone_"+.@zone ) );
+	.@size = getarraysize( .@limit_item );
+	
+	if( !.@size ){
+		debugmes "Invalid Zone : "+.@zone;
+	}else{
+		.@i = 0;
+		while( .@i < .@size ){
+			.@itemid = .@limit_item[.@i];
+			.@limit = .@limit_item[ .@i+1 ];
+			.@mode = ( ( .@limit < 0 )? -1:1 );
+			.@limit = .@limit * .@mode;
+			
+			.@eq = getiteminfo( .@itemid,2 );
+			.@name$ = getitemname( .@itemid ) + ( ( .@eq == 5 )?" ["+getitemslots( .@itemid )+"]":"" );
+			if( .@mode < 0 ){
+				mes "^FF0000[Min. "+( .@limit )+"] ^777777"+.@name$+"^000000";
+			}else if( .@mode > 0 ){
+				mes "^FF0000["+(( .@limit > 0 )?"Max. "+.@limit:"Disabled" )+"] ^777777"+.@name$+"^000000";
+			}
+			.@i += 2;
+		}
+	}
+	close;
+
+function	AddLimitedItem	{
+	.@arg_count = getargcount();
+	.@zone = getarg(0);
+	
+	.@i =1;
+	while( .@i < .@arg_count && .@size <= 127 ){
+		.@itemid = getarg( .@i );
+		if( getitemname( .@itemid ) != "null" ){
+			setarray .@limit_item[ .@size ],.@itemid,getarg( .@i+1 );
+			.@size += 2;
+			.@i++;
+		}
+		.@i++;
+	}
+	if( .@size ){
+		copyarray getd(".zone_"+.@zone+"[0]"),.@limit_item[0],.@size;
+		// debugmes "Zone "+.@zone+" : Total "+( .@size/2 )+" items";
+	}
+	return;
+}
+
+OnPCLoadMapEvent:
+if( getgmlevel() < .GM_Level ){
+	.@map$ = strcharinfo(3);
+	while( .@map < .map_size && .Map$[.@map] != .@map$ ) .@map++;
+	dispbottom "Map "+.@map;
+	if( .@map < .map_size ){
+		.@map++;
+		.@zone = atoi( .Map$[.@map] );
+		.@size = getarraysize( getd( ".zone_"+.@zone ) );
+		while( strcharinfo(3) == .@map$ && .@size ){
+			.@i = callsub( OnCheckItem,.@zone );
+			if( .@i < 0 ) end;
+			else if( .@i ){
+				mes " ";
+				message strcharinfo(0),"Limited Items Exceeded.";
+				mes "Please ensure all the Items above meet the requirements as stated above.";
+				close2;
+				warp "SavePoint",0,0;
+				end;
+			}
+			sleep2 ( .check_delay * 1000 );
+		}
+	}
+}
+end;
+	
+OnCheckItem:
+	.@zone = getarg(0);
+	copyarray .@limit_item[0],getd( ".zone_"+.@zone+"[0]" ),getarraysize( getd( ".zone_"+.@zone ) );
+	.@size = getarraysize( .@limit_item );
+
+	if( !.@size ){
+		debugmes "Invalid Zone : "+.@zone;
+		return -1;
+	}
+	while( .@i < .@size ){
+		.@itemid = .@limit_item[.@i];
+		.@limit = .@limit_item[ .@i+1 ];
+		.@mode = ( ( .@limit < 0 )? -1:1 );
+		.@limit = .@limit * .@mode;
+		
+		.@count = countitem( .@itemid ) );
+		if( getiteminfo( .@itemid,2 ) == IT_CARD )
+			.@count += isequippedcnt( .@itemid );
+			
+		.@eq = getiteminfo( .@itemid,2 );
+		.@name$ = getitemname( .@itemid ) + ( ( .@eq == 5 )?" ["+getitemslots( .@itemid )+"]":"" );
+		if( .@mode < 0 && .@count < .@limit ){
+			mes "^FF0000[Min. "+( .@limit )+"] ^777777"+.@name$+"^000000";
+			.@fail++;
+		}else if( .@mode > 0 && .@limit >= 0 && .@count > .@limit ){
+			mes "^FF0000["+(( .@limit > 0 )?"Max. "+.@limit:"Disabled" )+"] ^777777"+.@name$+"^000000";
+			.@fail++;
+		}
+		.@i += 2;
+	}
+return .@fail;
+}
+
+// npc that allow to view the map + zone info
+prontera,164,169,3	script	Sample#view	763,{
+	doevent "Limited Items::OnTalk";
+}

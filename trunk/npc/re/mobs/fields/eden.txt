@@ -1,0 +1,52 @@
+eden_fild01,0,0,0,0	monster	Mono	2679,20,0,0,0
+eden_fild01,0,0,0,0	monster	Monitor	2678,10,0,0,0
+eden_fild01,0,0,0,0	monster	Bird of Paradise	2674,10,0,0,0
+eden_fild01,0,0,0,0	monster	Angra Vespa	2666,15,0,0,0
+eden_fild01,0,0,0,0	monster	Mandrake	2677,15,15000,30000,0
+eden_fild01,0,0,0,0	monster	Blossom	2675,10,60000,30000,0
+
+eden_fild02,0,0,0,0	monster	Draco Fly	2676,10,0,0,0
+eden_fild02,0,0,0,0	monster	Lepera	2667,10,0,0,0
+eden_fild02,0,0,0,0	monster	Lepera	2667,10,0,0,0
+eden_fild02,0,0,0,0	monster	Imp	2664,20,0,0,0
+eden_fild02,0,0,0,0	monster	Sproutling	2668,3,0,0,0
+
+eden_fild03,0,0,0,0	monster	Toxi Frog	2673,25,0,0,0
+eden_fild03,49,93,0,0	monster	Blossom	2675,1,60000,30000,0
+eden_fild03,58,92,0,0	monster	Blossom	2675,1,60000,30000,0
+eden_fild03,49,90,0,0	monster	Blossom	2675,1,60000,30000,0
+eden_fild03,48,84,0,0	monster	Blossom	2675,1,60000,30000,0
+eden_fild03,48,30,0,0	monster	Blossom	2675,1,60000,30000,0
+eden_fild03,43,25,0,0	monster	Blossom	2675,1,60000,30000,0
+eden_fild03,21,39,0,0	monster	Blossom	2675,1,60000,30000,0
+eden_fild03,120,120,0,0	monster	Blossom	2675,1,60000,30000,0
+eden_fild03,123,119,0,0	monster	Blossom	2675,1,60000,30000,0
+eden_fild03,123,129,0,0	monster	Blossom	2675,1,60000,30000,0
+eden_fild03,126,124,0,0	monster	Blossom	2675,1,60000,30000,0
+eden_fild03,113,119,0,0	monster	Blossom	2675,1,60000,30000,0
+eden_fild03,108,114,0,0	monster	Blossom	2675,1,60000,30000,0
+eden_fild03,106,121,0,0	monster	Blossom	2675,1,60000,30000,0
+eden_fild03,108,157,0,0	monster	Blossom	2675,1,60000,30000,0
+eden_fild03,106,162,0,0	monster	Blossom	2675,1,60000,30000,0
+eden_fild03,109,165,0,0	monster	Blossom	2675,1,60000,30000,0
+eden_fild03,115,148,0,0	monster	Blossom	2675,1,60000,30000,0
+eden_fild03,118,148,0,0	monster	Blossom	2675,1,60000,30000,0
+eden_fild03,122,150,0,0	monster	Blossom	2675,1,60000,30000,0
+eden_fild03,125,153,0,0	monster	Blossom	2675,1,60000,30000,0
+eden_fild03,0,0,0,0	monster	Blossom	2675,3,30000,15000,0
+eden_fild03,66,157,0,0	monster	Blossom	2675,1,30000,15000,0
+eden_fild03,68,151,0,0	monster	Blossom	2675,1,30000,15000,0
+eden_fild03,71,149,0,0	monster	Blossom	2675,1,30000,15000,0
+eden_fild03,75,148,0,0	monster	Blossom	2675,1,30000,15000,0
+eden_fild03,78,149,0,0	monster	Blossom	2675,1,30000,15000,0
+eden_fild03,67,158,0,0	monster	Blossom	2675,1,30000,15000,0
+eden_fild03,70,160,0,0	monster	Blossom	2675,1,30000,15000,0
+eden_fild03,77,162,0,0	monster	Blossom	2675,1,30000,15000,0
+eden_fild03,80,158,0,0	monster	Blossom	2675,1,30000,15000,0
+eden_fild03,82,154,0,0	monster	Blossom	2675,1,30000,15000,0
+eden_fild03,82,152,0,0	monster	Blossom	2675,1,30000,15000,0
+eden_fild03,0,0,0,0	monster	Eden Sentinel	2669,5,0,0,0
+eden_fild03,0,0,0,0	monster	Flower Fae	2665,20,0,0,0
+eden_fild03,0,0,0,0	monster	Bana Mantis	2663,20,0,0,0
+eden_fild03,0,0,0,0	monster	Imp	2664,15,0,0,0
+eden_fild03,0,0,0,0	monster	Sproutling	2668,5,0,0,0

@@ -1,0 +1,38 @@
+eden_dun01,0,0,0,0	monster	Adamantium	2680,10,0,0,0
+eden_dun01,0,0,0,0	monster	Oridecon	2685,15,0,0,0
+eden_dun01,0,0,0,0	monster	Bradium	2681,20,0,0,0
+eden_dun01,0,0,0,0	monster	Coal	2683,20,0,0,0
+eden_dun01,0,0,0,0	monster	Mossy Golem	2684,15,0,0,0
+eden_dun01,0,0,0,0	monster	Rock Golem	2686,10,0,0,0
+eden_dun01,0,0,0,0	monster	Cave Monster	2682,1,1800000,3600000,0
+eden_dun01,0,0,0,0	monster	Mineral Cluster	2670,3,300000,600000,0
+eden_dun01,0,0,0,0	monster	Mineral Cluster	2671,3,300000,600000,0
+eden_dun01,0,0,0,0	monster	Mineral Cluster	2672,3,300000,600000,0
+
+eden_dun02,0,0,0,0	monster	Oridecon	2685,35,0,0,0
+eden_dun02,0,0,0,0	monster	Bradium	2681,25,0,0,0
+eden_dun02,0,0,0,0	monster	Coal	2683,20,0,0,0
+eden_dun02,0,0,0,0	monster	Cave Monster	2682,1,1800000,3600000,0
+eden_dun02,0,0,0,0	monster	Calliope	2688,3,30000,10000,0
+eden_dun02,0,0,0,0	monster	Lorelei	2693,3,30000,10000,0
+eden_dun02,0,0,0,0	monster	Elunium	2690,20,10000,10000,0
+eden_dun02,0,0,0,0	monster	Adamantium	2680,5,0,0,0
+eden_dun02,0,0,0,0	monster	Contagious	2689,15,10000,0,0
+eden_dun02,0,0,0,0	monster	Hazardous	2692,15,10000,0,0
+eden_dun02,0,0,0,0	monster	Mineral Cluster	2670,3,300000,600000,0
+eden_dun02,0,0,0,0	monster	Mineral Cluster	2671,3,300000,600000,0
+eden_dun02,0,0,0,0	monster	Mineral Cluster	2672,3,300000,600000,0
+
+eden_dun03,0,0,0,0	monster	Elunium Golem	2691,30,10000,0,0
+eden_dun03,0,0,0,0	monster	Oridecon Golem	2694,20,10000,0,0
+eden_dun03,0,0,0,0	monster	Bradium Golem	2024,1,300000,600000,0
+eden_dun03,0,0,0,0	monster	Adamantium	2680,20,10000,0,0
+eden_dun03,0,0,0,0	monster	Calliope	2688,20,10000,0,0
+eden_dun03,0,0,0,0	monster	Cave Monster	2682,3,1800000,3600000,0
+eden_dun03,0,0,0,0	monster	Lorelei	2693,20,10000,0,0
+eden_dun03,0,0,0,0	monster	Hazardous	2692,15,10000,0,0
+eden_dun03,0,0,0,0	monster	Contagious	2689,15,10000,0,0
+eden_dun03,0,0,0,0	boss_monster	Adamantoise	2687,1,10800000,600000,0
+eden_dun03,0,0,0,0	monster	Mineral Cluster	2670,5,300000,600000,0
+eden_dun03,0,0,0,0	monster	Mineral Cluster	2671,5,300000,600000,0
+eden_dun03,0,0,0,0	monster	Mineral Cluster	2672,5,300000,600000,0

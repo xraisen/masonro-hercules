@@ -1,0 +1,14 @@
+eden,22,152,50,50	monster	Poring	1002,15,10000,5000,0
+eden,22,152,50,50	monster	Drops	1113,15,110000,5000,0
+eden,22,152,50,50	monster	Roda Frog	1012,15,10000,5000,0
+eden,22,152,50,50	monster	Mandrake	2677,1,60000,30000,0
+eden,22,152,50,50	monster	Bird of Paradise	2674,3,10000,5000,0
+eden,22,152,50,50	monster	Lunatic	1063,5,10000,5000,0,0
+eden,22,152,50,50	monster	ChonChon	1011,5,10000,5000,0
+eden,22,152,50,50	monster	Condor	1009,5,10000,5000,0
+eden,22,152,50,50	monster	Picky	1050,7,10000,5000,0
+eden,22,152,50,50	monster	Willow	1010,5,10000,5000,0
+eden,22,152,50,50	monster	Roda Frog	1012,3,10000,5000,0
+eden,22,152,50,50	monster	Thief Bug	1051,7,10000,5000,0
+eden,22,152,50,50	monster	Spore	1014,5,10000,5000,0
+eden,22,152,50,50	monster	Fabre	1184,5,10000,5000,0

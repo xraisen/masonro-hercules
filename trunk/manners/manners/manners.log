@@ -1,0 +1,25 @@
+﻿Build started 4/11/2014 1:44:40 AM.
+     1>Project "D:\My Documents\My Files\MasonRO\Hercules\2013-08-14aRagexe Full Client\Hercules-master\manners\manners.vcxproj" on node 2 (build target(s)).
+     1>InitializeBuildStatus:
+         Creating "manners\\manners.unsuccessfulbuild" because "AlwaysCreate" was specified.
+       ClCompile:
+         C:\Program Files\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /I..\src\common /I..\3rdparty\msinttypes\include /Zi /nologo /W3 /WX- /O2 /Oi /Oy- /GL /D _CRT_SECURE_NO_WARNINGS /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"manners\\" /Fd"manners\\vc100.pdb" /Gd /TC /analyze- /errorReport:prompt ..\src\plugins\manners.c
+         manners.c
+     1>d:\my documents\my files\masonro\hercules\2013-08-14aragexe full client\hercules-master\src\common\../common/winapi.h(25): warning C4005: '_CRT_SECURE_NO_WARNINGS' : macro redefinition
+                 command-line arguments :  see previous definition of '_CRT_SECURE_NO_WARNINGS'
+       Link:
+         C:\Program Files\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"..\plugins\manners.dll" /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /ManifestFile:"manners\\manners.dll.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"D:\My Documents\My Files\MasonRO\Hercules\2013-08-14aRagexe Full Client\Hercules-master\plugins\manners.pdb" /OPT:REF /OPT:ICF /LTCG /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"..\plugins\manners.lib" /MACHINE:X86 /DLL manners\\manners.obj
+            Creating library ..\plugins\manners.lib and object ..\plugins\manners.exp
+         Generating code
+         Finished generating code
+         manners.vcxproj -> D:\My Documents\My Files\MasonRO\Hercules\2013-08-14aRagexe Full Client\Hercules-master\manners\..\plugins\manners.dll
+       Manifest:
+         C:\Program Files\Microsoft SDKs\Windows\v7.0A\bin\mt.exe /nologo /verbose /outputresource:"..\plugins\manners.dll;#2" /manifest manners\\manners.dll.intermediate.manifest
+       FinalizeBuildStatus:
+         Deleting file "manners\\manners.unsuccessfulbuild".
+         Touching "manners\\manners.lastbuildstate".
+     1>Done Building Project "D:\My Documents\My Files\MasonRO\Hercules\2013-08-14aRagexe Full Client\Hercules-master\manners\manners.vcxproj" (build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:14.84

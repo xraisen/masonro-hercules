@@ -1,0 +1,42 @@
+eden,162,132,0	warp	eden#01	1,1,eden_fild01,29,23
+eden_fild01,21,15,0	warp	eden#02	1,1,eden,158,127
+eden_fild01,182,180,0	warp	eden#03	1,1,eden_fild02,31,25
+eden_fild02,28,17,0	warp	eden#04	1,1,eden_fild01,177,179
+eden_fild02,166,184,0	warp	eden#05	1,1,eden_fild03,34,37
+eden_fild03,21,22,0	warp	eden#06	5,5,eden_fild02,164,179
+eden_in01,171,228,0	warp	eden#07	1,1,eden_in01,309,20
+eden_in01,309,16,0	warp	eden#08	1,1,eden_in01,171,224
+eden_in01,171,186,0	warp	eden#09	1,1,eden,26,61
+eden,24,63,0	warp	eden#10	1,1,eden_in01,171,189
+eden,62,73,0	warp	eden#11	1,1,eden_in01,190,303
+eden_in01,189,298,0	warp	eden#12	1,1,eden,62,69
+eden_in01,109,298,0	warp	eden#13	1,1,eden,92,82
+eden,90,85,0	warp	eden#14	1,1,eden_in01,110,301
+eden_in01,190,319,0	warp	eden#15	1,1,eden_in01,275,333
+eden_in01,275,337,0	warp	eden#16	1,1,eden_in01,190,322
+eden,42,30,0	warp	eden#17	1,1,eden_in01,29,215
+eden_in01,30,212,0	warp	eden#18	1,1,eden,45,33
+eden,94,146,0	warp	eden#19	1,1,eden_in01,110,20
+eden_in01,109,16,0	warp	eden#20	1,1,eden,94,141
+eden_in01,124,38,0	warp	eden#21	1,1,eden_in01,236,36
+eden_in01,239,36,0	warp	eden#22	1,1,eden_in01,126,38
+eden_in01,95,38,0	warp	eden#23	1,1,eden_in01,199,36
+eden_in01,196,36,0	warp	eden#24	1,1,eden_in01,92,37
+// eden_in01,218,23,0	warp	eden#25	1,1,chess_01,115,278
+// chess_01,115,283,0	warp	eden#26	1,1,eden_in01,218,18
+eden_in01,30,298,0	warp	eden#27	1,1,eden,35,66
+eden,35,70,0	warp	eden#28	1,1,eden_in01,30,301
+
+// Farm
+eden,86,119,0	warp	eden#farm1	1,1,eden,82,119
+eden,84,119,0	warp	eden#farm2	1,1,eden,88,119
+
+// Cave
+eden_fild03,112,154,0	warp	eden#d1	2,2,eden_dun01,29,48
+eden_dun01,29,52,0	warp	eden#d2	4,2,eden_fild03,109,151
+eden_dun01,33,234,0	warp	eden#d3	4,2,eden_dun02,217,15
+eden_dun02,217,11,0	warp	eden#d4	4,2,eden_dun01,33,230
+eden_dun02,138,222,0	warp	eden#d5	4,2,eden_dun03,48,168
+eden_dun03,48,164,0	warp	eden#d6	4,2,eden_dun02,138,217
+eden_dun03,153,99,0	warp	eden#d7	4,2,bastion01,103,123
+bastion01,103,119,0	warp	eden#d8	4,2,eden_dun03,153,95

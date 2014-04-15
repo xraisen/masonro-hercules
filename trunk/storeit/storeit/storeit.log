@@ -1,0 +1,23 @@
+﻿Build started 4/11/2014 1:44:29 AM.
+     1>Project "D:\My Documents\My Files\MasonRO\Hercules\2013-08-14aRagexe Full Client\Hercules-master\storeit\storeit.vcxproj" on node 3 (build target(s)).
+     1>InitializeBuildStatus:
+         Creating "storeit\\storeit.unsuccessfulbuild" because "AlwaysCreate" was specified.
+       ClCompile:
+         C:\Program Files\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /I..\src\common /I..\3rdparty\msinttypes\include /Zi /nologo /W3 /WX- /O2 /Oi /Oy- /GL /D _WINDLL /D _MBCS /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"storeit\\" /Fd"storeit\\vc100.pdb" /Gd /TC /analyze- /errorReport:prompt ..\src\plugins\storeit.c
+         storeit.c
+       Link:
+         C:\Program Files\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"..\plugins\storeit.dll" /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /ManifestFile:"storeit\\storeit.dll.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"D:\My Documents\My Files\MasonRO\Hercules\2013-08-14aRagexe Full Client\Hercules-master\plugins\storeit.pdb" /OPT:REF /OPT:ICF /LTCG /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"..\plugins\storeit.lib" /MACHINE:X86 /DLL storeit\\storeit.obj
+            Creating library ..\plugins\storeit.lib and object ..\plugins\storeit.exp
+         Generating code
+         Finished generating code
+         storeit.vcxproj -> D:\My Documents\My Files\MasonRO\Hercules\2013-08-14aRagexe Full Client\Hercules-master\storeit\..\plugins\storeit.dll
+       Manifest:
+         C:\Program Files\Microsoft SDKs\Windows\v7.0A\bin\mt.exe /nologo /verbose /outputresource:"..\plugins\storeit.dll;#2" /manifest storeit\\storeit.dll.intermediate.manifest
+       FinalizeBuildStatus:
+         Deleting file "storeit\\storeit.unsuccessfulbuild".
+         Touching "storeit\\storeit.lastbuildstate".
+     1>Done Building Project "D:\My Documents\My Files\MasonRO\Hercules\2013-08-14aRagexe Full Client\Hercules-master\storeit\storeit.vcxproj" (build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:12.66

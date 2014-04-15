@@ -1,0 +1,219 @@
+//===== rAthena Script ================================================================================================================
+//= Goblin Invasion
+//===== Created By: ===================================================================================================================
+//= Mysterious
+//===== Current Version: ==============================================================================================================
+//= v1.3
+//===== Compatible With: ==============================================================================================================
+//= TXT & SQL
+//===== Credits: ==============================================================================================================
+//= Mysterious
+//==== Information: =====================================================================================================
+// Keep in mind that the prize amount that is given out is 5 <of the item ID you input> in the NPC.
+// With knowledge, you can change it to whatever you want the prize to be (I.e. cashpoints, etc.).
+//===================================================================================================================
+
+eden_in01,305,51,6	script	Invasion Goblin Starter	459,{
+set .@getCoin, 0;
+set .gm,5;//GM Level to access the GM Menu. Default: 50
+
+	// GM menu 
+	//It allows GMs Level 50 or more to Start and Stop invasions.
+	if (getgmlevel()>=99) {
+		if(select("No:Item [" + getitemname($ItemID) + "]")==1) goto StepTwo;
+			mes "[^FF9900Invasion Goblin Starter^000000]";
+			mes "Which item would you like the Goblin Leader to drop?";
+			mes "Please input the item ID:";
+			input $ItemID;
+	}
+StepTwo:
+	if (getgmlevel()>=.gm) {
+	mes "[^FF9900Invasion Goblin Starter^000000]";
+	mes "An invasion is in progress..";
+	mes "Location: " + .Map$;
+	mes "^FF0000"+.mobs_left+"^000000 Goblins left";	
+	mes " ";
+		if (.mobs_left > 0) {
+			mes "Wanna ^0000FFStop^000000 the Event GM " + strcharinfo(0) + "?";
+			if(select("No:Yes")==1) close;
+			close2;
+			goto OnStop;	
+		}
+		else if (.mobs_left <= 0) {
+			mes "Wanna ^0000FFStart^000000 the Event GM " + strcharinfo(0) + "?";
+			if(select("No:Yes")==1) close;
+			close2;
+			set $sponsor$, strcharinfo(0);
+			goto OnStart;				
+		}
+	}
+	
+	else if (getgmlevel() <= 4) {
+		if(.mobs_left >= 1) {
+		mes "[^FF9900Invasion Goblin Starter^000000]";
+		mes "An invasion is in progress..";
+		mes "Location: " + .Map$;
+		mes "^FF0000"+.mobs_left+"^000000 Goblins left";
+		mes " ";
+		next;
+		}		
+			mes "[^FF9900Invasion Goblin Starter^000000]";
+			mes "To start or stop the event, I will be charging you Ten ^0000FF \"100 Point Coin\"^000000 worth.";
+			next;
+			mes "[^FF9900Invasion Goblin Starter^000000]";
+			mes "What would you like to do " +strcharinfo(0) +"?";
+			next;
+			switch(select("Start Event:Stop Event")) {	
+			case 1:		
+				if(.mobs_left >= 1) {
+					mes "Event is still going on. ^0000FFStop^000000 the event instead of starting.";
+					close2;
+					dispbottom "No \"100 Point Coin\" has been deducted.";
+					end;
+				}
+				getinventorylist;
+				for(set .@i,0; .@i < @inventorylist_count; set .@i,.@i+1){
+					if(@inventorylist_id[.@i] == 26000){ 
+						set .@getCoin, @inventorylist_amount[.@i];
+					}
+				}
+				if (.@getCoin >= 10) {
+					delitem 26000,10;
+					mes "[^FF9900Invasion Goblin Starter^000000]";
+					mes "Thank you for the sponsorship. You will be recieving a 1,000 a free cash points and a 5 Poring coin.";
+					next;
+					mes "[^FF9900Invasion Goblin Starter^000000]";
+					mes "The event will start now.";
+					close2;
+					set #KAFRAPOINTS, #KAFRAPOINTS + 1000;
+					getitem 7539,5; 
+					dispbottom "Ten \"100 Point Coin\" has been deducted.";
+					dispbottom "Total free cash points " + #KAFRAPOINTS;
+					set $sponsor$, strcharinfo(0);
+					goto OnStart;
+				}
+				else {
+				mes "[^FF9900Invasion Goblin Starter^000000]";
+				mes "You dont have enough ^0000FF\"100 Point Coin\"^000000 to start the event.";
+				close;
+				}
+			case 2:
+				if(.mobs_left <= 0) {
+					mes "The Event is not running. ^0000FFStart^000000 the event instead of stopping.";
+					close2;
+					dispbottom "No \"100 Point Coin\" has been deducted.";
+					end;
+				}
+				getinventorylist;
+				for(set .@i,0; .@i < @inventorylist_count; set .@i,.@i+1){
+					if(@inventorylist_id[.@i] == 26000){ 
+						set .@getCoin, @inventorylist_amount[.@i];
+					}
+				}
+				if (.@getCoin >= 10) {
+					delitem 26000,10;
+					mes "[^FF9900Invasion Goblin Starter^000000]";
+					mes "Thank you for the sponsorship. You will be recieving a 1,000 a free cash points and a 5 Poring coin.";
+					next;
+					mes "[^FF9900Invasion Goblin Starter^000000]";
+					mes "The event will stop now.";
+					close2;
+					set #KAFRAPOINTS, #KAFRAPOINTS + 1000;
+					getitem 7539,5; 
+					dispbottom "Ten \"100 Point Coin\" has been deducted.";
+					dispbottom "Total free cash points " + #KAFRAPOINTS;
+					set $sponsor$, strcharinfo(0);
+					goto OnStop;
+				}
+				else {
+				mes "[^FF9900Invasion Goblin Starter^000000]";
+				mes "You dont have enough ^0000FF\"100 Point Coin\"^000000 to start the event.";
+				close;
+				}
+			}
+			end;
+	}	
+	// If a player clicks the NPC, it displays:
+	
+	mes "[Invasion]";
+	mes .mobs_left+" have invaded "+.Map$[.rand_map]+"!";
+	close;
+	
+			/////////////////////////
+			//The actual NPC Script//
+			/////////////////////////
+OnTue0900:
+OnTue1900: // Change this to your liking
+OnStart:
+	set .mobs_left, 1;
+	sleep2 1000;
+	set $@ran, rand(3,27);
+	if ($@ran == 27) set .Map$,"alberta";
+	if ($@ran == 26) set .Map$,"aldebaran";
+	if ($@ran == 25) set .Map$,"brasilis";
+	if ($@ran == 24) set .Map$,"comodo";
+	if ($@ran == 23) set .Map$,"dewata";
+	if ($@ran == 22) set .Map$,"einbech";
+	if ($@ran == 21) set .Map$,"einbroch";
+	if ($@ran == 20) set .Map$,"geffen";
+	if ($@ran == 19) set .Map$,"gonryun";
+	if ($@ran == 18) set .Map$,"hugel";
+	if ($@ran == 17) set .Map$,"izlude";
+	if ($@ran == 16) set .Map$,"jawaii";
+	if ($@ran == 15) set .Map$,"lighthalzen";
+	if ($@ran == 14) set .Map$,"malaya";
+	if ($@ran == 13) set .Map$,"malangdo";
+	if ($@ran == 12) set .Map$,"moscovia";
+	if ($@ran == 11) set .Map$,"morocc";
+	if ($@ran == 10) set .Map$,"niflheim";
+	if ($@ran == 9) set .Map$,"payon";
+	if ($@ran == 8) set .Map$,"rachel";
+	if ($@ran == 7) set .Map$,"prontera";
+	if ($@ran == 6) set .Map$,"splendide";
+	if ($@ran == 5) set .Map$,"veins";
+	if ($@ran == 4) set .Map$,"yuno";
+	if ($@ran == 3) set .Map$,"umbala";
+	sleep2 1000;
+	announce "[ Rune-Midgard Guard ]: We have a trouble here in the town of " + .Map$ + "!", bc_all;
+	sleep2 5000;
+	announce "[ Rune-Midgard Guard ]: Everyone, we need your talents to get rid of these Goblins!", bc_all;
+	sleep2 5000;
+	if ($sponsor$ != "") {
+	announce "Event is sponsored by: " + $sponsor$ ,bc_all,0xFFFF00;
+	}
+	set $sponsor$,"";	
+	monster .Map$,0,0,"Goblin",1258,250,"Invasion Goblin Starter::OnMyMobDead";
+	set .mobs_left, 250;
+	end;
+	
+	
+OnTimer1805000:	// 30 minutes later, kills all the mobs.
+	killmonster .Map$,"Invasion Goblin Starter::OnMyMobDead";
+	killmonster .Map$,"Invasion Goblin Starter::OnSpecialMobDead";
+	set .mobs_left, 0;
+
+OnStop://When the event is stopped by a GM, or all monsters dead.
+	set .mobs_left, 0;
+	killmonster .Map$,"Invasion Goblin Starter::OnMyMobDead";
+	killmonster .Map$,"Invasion Goblin Starter::OnSpecialMobDead";
+	announce "It seems that the invasion has ended!",bc_all;
+	end;
+
+OnMyMobDead: //When a Goblin is killed
+	set .mobs_left, .mobs_left-1;
+	if (.mobs_left==0) {
+		announce "[ Rune-Midgard Guard ]: The Goblin Leader has spawned in " + .Map$ + "!", bc_all;
+		monster .Map$,0,0,"Goblin Leader",1299,1,"Invasion Goblin Starter::OnSpecialMobDead";
+
+	} else {
+		announce "["+.mobs_left+"/250] Goblins left.",bc_map;
+	}
+	end;
+
+OnSpecialMobDead:
+		announce strcharinfo(0)+" has fought off the Goblin Invasion and has been awarded a worthy prize!", bc_all;
+		getitem $ItemID,5; //Change the [5] to the amount you wish to hand out.
+		donpcevent "Invasion Goblin Starter::OnStop";
+	end;
+
+}

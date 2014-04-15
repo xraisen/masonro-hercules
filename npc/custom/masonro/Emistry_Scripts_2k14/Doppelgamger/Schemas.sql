@@ -1,0 +1,1 @@
+ALTER TABLE `global_reg_value` CHANGE COLUMN `value` `value` TEXT NOT NULL  ;

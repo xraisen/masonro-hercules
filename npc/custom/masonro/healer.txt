@@ -1,0 +1,100 @@
+//===== eAthena Script =======================================
+//= Heal Npc
+//===== By: ==================================================
+//= Lotsa People (1.x)
+//===== Current Version: =====================================
+//= 3.1
+//===== Compatible With: =====================================
+//= eAthena 0.1+;
+//===== Description: =========================================
+//= Healer NPC Which Heals For Free
+//===== Additional Comments: =================================
+//= 2.0 Duplicates And Changed A Bit you can replace this script file by 
+//= heal_payment.txt if you want that players have to pay their healings. [Darkchild]
+//= 3.0 Changed and edited the script added other warp points of maps. [massdriller]
+//= 3.1 Optimized for the greater good. [Kisuka]
+//============================================================
+
+prontera,160,186,2	script	Midgard Assistant#h1-1::Midgard Assistant	742,{
+	
+	mes "[Midgard Assistant]";
+	mes "Hi, I can heal you for free. But I can also do a buff and heal for only ^0000FF20,000^000000 zeny.";
+	next;
+	menu "Heal",heal_only,"Heal and Buff",heal_buff,"Buff info",info;
+	
+heal_only:
+    npctalk "Heal!!";
+    skilleffect 28,9999;
+    percentheal 100,100;
+close;
+
+heal_buff:
+if(Zeny > 20000) {
+    npctalk "Heal!!";
+    skilleffect 28,9999;
+    percentheal 100,100;
+	atcommand "#item " + strcharinfo(0) + " 7139" ; // Glistering Coat for FCP
+	sc_start SC_NJ_NEN,600000,5; // Soul ninja skill lvl 5
+	sc_start SC_WINDWALK,600000,10; // Wind walk lvl 10
+	atcommand "@useskill 479 5 " +strcharinfo(0); // Full chemical protection lvl 5
+	sc_start SC_CONCENTRATION,600000,10; // Improve Concentration lvl 10
+	sc_start SC_BLESSING,600000,10; // Blessing lvl 10
+    sc_start SC_ANGELUS,600000,10; // Angelus lvl 10
+	sc_start SC_IMPOSITIO,600000,5; // Impositio manus lvl 5
+	sc_start SC_SUFFRAGIUM,600000,3; // Suffragium lvl 3
+	sc_start SC_MAGNIFICAT,600000,5; // Magnificat lvl 10    
+    sc_start SC_INC_AGI,600000,10; // Increase agi lvl 10   
+	sc_start SC_SOULLINK,600000,10; // Soul Link lvl 10   
+	Zeny = Zeny - 20000;
+} else {
+	mes "[Midgard Assistant]";
+	mes "Sorry, you do not have enough zeny. Please come back again.";
+}
+close;
+
+info:
+	mes "[Midgard Assistant]";
+	mes "The buff I can give you for 10 mins is as follows:";
+	mes "1.) Ninja Nen lvl 5";
+	mes "2.) Wind Walk lvl 10";
+	mes "3.) Full Chemical Protection lvl 5";
+	mes "5.) Improve Concentration lvl 10";
+	mes "6.) Blessing lvl 10";
+	mes "7.) Angelus lvl 10";
+	mes "8.) Imposito lvl 5";
+	mes "9.) Suffragium lvl 3";
+	mes "10.) Magnificat lvl 10";
+	mes "11.) Increase Agi lvl 10";
+	mes "12.) Soul Link lvl 10";	
+close;
+
+}
+
+// --------- NPC Clones ---------
+morocc,158,97,5	duplicate(Midgard Assistant)	Midgard Assistant#h1-2	742
+ayothaya,155,111,5	duplicate(Midgard Assistant)	Midgard Assistant#h1-3	742
+geffen,121,61,5	duplicate(Midgard Assistant)	Midgard Assistant#h1-4	742
+umbala,94,162,5	duplicate(Midgard Assistant)	Midgard Assistant#h1-5	742
+payon,146,228,5	duplicate(Midgard Assistant)	Midgard Assistant#h1-6	742
+alberta,185,144,5	duplicate(Midgard Assistant)	Midgard Assistant#h1-7	742
+aldebaran,134,123,5	duplicate(Midgard Assistant)	Midgard Assistant#h1-8	742
+izlude,125,118,5	duplicate(Midgard Assistant)	Midgard Assistant#h1-9	742
+xmas,149,136,5	duplicate(Midgard Assistant)	Midgard Assistant#h1-10	742
+comodo,199,148,5	duplicate(Midgard Assistant)	Midgard Assistant#h1-11	742
+amatsu,200,80,5	duplicate(Midgard Assistant)	Midgard Assistant#h1-12	742
+gonryun,164,130,5	duplicate(Midgard Assistant)	Midgard Assistant#h1-13	742
+yuno,152,186,5	duplicate(Midgard Assistant)	Midgard Assistant#h1-14	742
+niflheim,188,180,5	duplicate(Midgard Assistant)	Midgard Assistant#h1-15	742
+louyang,225,103,5	duplicate(Midgard Assistant)	Midgard Assistant#h1-16	742
+rachel,124,116,5	duplicate(Midgard Assistant)	Midgard Assistant#h1-17	742
+//dicastes01,192,190,5	duplicate(Midgard Assistant)	Midgard Assistant#h1-18	742
+//dewata,194,184,5	duplicate(Midgard Assistant)	Midgard Assistant#h1-19	742
+bat_room,148,153,5	duplicate(Midgard Assistant)	Midgard Assistant#h1-20	742
+eden,47,77,4	duplicate(Midgard Assistant)	Midgard Assistant#h1-21	742
+pay_arche,37,135,5	duplicate(Midgard Assistant)	Midgard Assistant#h1-22	742
+einbroch,56,198,2	duplicate(Midgard Assistant)	Midgard Assistant#h1-23	742
+lighthalzen,153,95,6	duplicate(Midgard Assistant)	Midgard Assistant#h1-24	742
+einbech,67,102,4	duplicate(Midgard Assistant)	Midgard Assistant#h1-25	742
+hugel,91,149,2	duplicate(Midgard Assistant)	Midgard Assistant#h1-26	742
+veins,214,127,2	duplicate(Midgard Assistant)	Midgard Assistant#h1-27	742
+moscovia,223,199,2	duplicate(Midgard Assistant)	Midgard Assistant#h1-28	742

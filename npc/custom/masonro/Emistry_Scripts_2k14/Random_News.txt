@@ -1,0 +1,19 @@
+-	script	News	-1,{
+OnInit:
+set .Time,60;		// Announce every x Minute.
+
+setarray .News$[0],	// Random Message to be Announced
+		"Do you like MasonRO? Prove your support by having at least one premium items.",
+		"Do not forget your work and studies by just playing MasonRO",
+		"Love is the best and wonderful thing. Show your love!",
+		"Good things comes to those who waits. So please wait until the right condition comes.",
+		"Donations are good for power hunting and leveling up. It saves you time.",
+		"You can obtain items by votings. So vote every 12 hours located on the website to get the freebies.",
+		"Do not have time to play? Premium items can help you boost you up.";
+		
+while( 1 ){
+	announce .News$[ rand( getarraysize( .News$ ) ) ],0;
+	sleep ( .Time * 60000 );
+	}
+end;
+}

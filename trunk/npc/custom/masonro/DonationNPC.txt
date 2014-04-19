@@ -1,0 +1,162 @@
+prontera,140,182,6	script	Item Redemption	987,{
+	// NPC Settings - SET THESE BEFORE LOADING THE SCRIPT!
+	set $servername$,"MasonRO";
+	set $npcname$,"^009900[Item Redeemer]^000000"; // NPC Name to display during chat. Default: "[Item Redeemer]"
+	set $redeemtable$,"cp_redeemlog"; // Default: "cp_redeemlog"
+	set $showcredits,0; // Display Credits to FluxCP Creators? 0 = Disable. 1 = Enable. Default: 1
+	// End NPC Settings.
+
+	// Server Settings
+	// DON'T CHANGE THIS UNLESS YOU KNOW WHAT YOU'RE DOING AND HAVE MADE THE APPROPRIATE SOURCE MODS!
+	set $maxinventorysize,100; // Max amount of unique items able to be held in inventory.
+	set $maxquantity,30000; // Max amount of an item able to be held in inventory.
+	// End Server Settings.
+
+	// Begin NPC
+	mes $npcname$;
+	if (Sex)
+		mes "Well hello there good sir!";
+	else
+		mes "Well hello there young madam!";
+	mes "How may I be of assistance to you on this fine day?";
+	//mes "Credit Points: ^FF0000" + #CREDIT_PTS + "^000000";
+	next;
+	switch(select("^FF0000I wish to redeem items^000000:Who might you be?:I am merely perusing the area")) {
+		case 1:
+			mes $npcname$;
+			deletearray @inventorylist_id;
+			deletearray @inventorylist_amount;
+			set @inventorylist_count,0;
+			getinventorylist;
+			if (@inventorylist_count < $maxinventorysize) {
+				query_sql "SELECT `id`, `nameid`, `quantity`  FROM `"+escape_sql($redeemtable$)+"` WHERE `account_id` = '"+escape_sql(getcharid(3))+"' AND `redeemed` = '0' LIMIT 128",.@id,.@nameid,.@quantity;
+				mes "Items Pending Redemption: "+getarraysize(.@id);
+				if (getarraysize(.@id) > 0) {
+					for( set .@loop, 0; .@loop < getarraysize(.@id); set .@loop,.@loop+1) {
+						deletearray @inventorylist_id;
+						deletearray @inventorylist_amount;
+						set @inventorylist_count,0;
+						getinventorylist;
+						if (@inventorylist_count < $maxinventorysize) {
+							for( set .@loop_inner,0; .@loop_inner < @inventorylist_count; set .@loop_inner,.@loop_inner+1) {
+								deletearray @inventorylist_id;
+								deletearray @inventorylist_amount;
+								set @inventorylist_count,0;
+								getinventorylist;
+								if (@inventorylist_id[.@loop_inner] == .@nameid[.@loop]) {
+									if (@inventorylist_amount[.@loop_inner]+.@quantity[.@loop] > $maxquantity) {
+										mes "I'm terribly sorry, but you cannot hold more than "+$maxquantity+" of "+getitemname(.@nameid[.@loop])+" at a time!";
+										mes "Please come back when you carry less of this item.";
+										if ($showcredits) callfunc "F_FluxCredits";
+										close;
+									} else if (checkweight(.@nameid[.@loop],.@quantity[.@loop]) == 0) {
+										mes "I'm terribly sorry, but you are carrying too much to accept your rewards.";
+										mes "Please come again with less weight.";
+										if ($showcredits) callfunc "F_FluxCredits";
+										close;
+									}
+								}
+							}
+							query_sql "UPDATE `"+escape_sql($redeemtable$)+"` SET `char_id` = '"+escape_sql(getcharid(0))+"', `redeemed` = '1', `redemption_date` = NOW() WHERE `id` = '"+escape_sql(.@id[.@loop])+"'";
+							getitem .@nameid[.@loop],.@quantity[.@loop];
+							mes .@quantity[.@loop]+"x "+getitemname(.@nameid[.@loop]);
+						} else {
+							mes "I'm terribly sorry, but you cannot hold more than "+$maxinventorysize+" items in your inventory.";
+							mes "Please come again with less items.";
+							if ($showcredits) callfunc "F_FluxCredits";
+							close;
+						}
+					}
+					if (Sex)
+						mes "Thank you for your patronage fine sir.";
+					else
+						mes "Thank you for your patronage ma'am.";
+					mes "Please enjoy your stay on our server, "+$servername$+".";
+					if ($showcredits) callfunc "F_FluxCredits";
+				} else {
+					mes "My records indicate that there are no rewards awaiting to be redeemed.";
+					mes "My deepest apologies for the misunderstanding.";
+					if ($showcredits) callfunc "F_FluxCredits";
+				}
+			} else {
+				mes "I'm terribly sorry, but you cannot hold more than "+$maxinventorysize+" items in your inventory.";
+				mes "Please come again with less items.";
+				if ($showcredits) callfunc "F_FluxCredits";
+			}
+		break;
+		case 2:
+			mes $npcname$;
+			mes "I am here to allow for the redemption of rewards for donations to our server, "+$servername$;
+			mes "Donations may be made to the server via the control panel.";
+			if ($showcredits) callfunc "F_FluxCredits";
+		break;
+		case 3:
+			mes $npcname$;
+			mes "Very well then.";
+			mes "Good day to you.";
+			if ($showcredits) callfunc "F_FluxCredits";
+		break;
+		// case 2:
+			// mes $npcname$;
+			// mes "How many ^0000FFCredit Coins^000000 would you like to exchange?";
+			// mes "Credit Points: ^FF0000" + #CREDIT_PTS + "^000000 ";
+			// next;
+			// input @buycredit;
+			// if (@buycredit < 1) goto Lrealamount;
+			// if (@buycredit > #CREDIT_PTS) goto Lneedcreds;
+			// getitem 18530,@buycredit;
+			// set #CREDIT_PTS, #CREDIT_PTS - @buycredit;
+			// mes $npcname$;
+			// mes "Thank you. Come again.";
+			// mes "Credit Points: ^FF0000" + #CREDIT_PTS + "^000000 ";
+			// dispbottom @buycredit+" coins obtained. Your remaining credit points is " +#CREDIT_PTS+".";
+		// break;
+	}
+	close;
+
+Item_Buy:
+	mes $npcname$;
+	mes "Are you sure you want to buy ^0000FF"+getitemname(@itemID)+"^000000 for ^FF0000"+@creditprice+"^000000 credit points?";
+	switch(select("No:Yes")) {
+		case 1:
+			mes $npcname$;
+			mes "Please make up your mind.";
+			break;	
+		case 2:
+			if (@creditprice > #CREDIT_PTS) goto Lneedcreds;		
+			getitem @itemID, 1;
+			set #CREDIT_PTS, #CREDIT_PTS - @creditprice;
+			mes $npcname$;
+			mes "Nice to have business with you.";
+			mes "Remaining Credit Points: ^FF0000" + #CREDIT_PTS + "^000000 ";
+			dispbottom "You obtained "+getitemname(@itemID)+" for "+@creditprice+" credit points. Your remaining balance is " +#CREDIT_PTS+".";
+			break;
+	}
+	
+	close;
+	
+Lrealamount:
+	mes $npcname$;
+	mes "Don't play jokes with me please. Next time ask for a real amount.";
+	close;	
+	
+Lneedcreds:
+	mes $npcname$;
+	mes "Sorry, you don't have enough ^FF0000credit points^000000.";
+	close;	
+}
+
+
+
+// Credit Displaying Function
+// Please do not modify or delete this function or its contents.
+// To disable the credits from being shown, please set $showcredits to 0 in the NPC Settings at the top of this file.
+function	script	F_FluxCredits	{
+	mes "-----------------------------------";
+	mes "Powered by Flux Control Panel.";
+	mes "Copyright © 2008-2011 Matthew Harris and Nikunj Mehta.";
+	close;
+}
+
+
+

@@ -669,7 +669,7 @@ OnStartNPC:
 				AddMap("Abbey, Cursed Monastery - Lvl 3", "abbey03", 120, 10);
 			EndNode();
 			StartNode("Abyss Lakes", "Zeny", 1000);
-				AddMap("Abyss Lakes - Lvl 1", "abyss_01", 192, 207);
+				AddMap("Abyss Lakes - Lvl 1", "abyss_01", 263, 272);
 				AddMap("Abyss Lakes - Lvl 2", "abyss_02", 275, 270);
 				AddMap("Abyss Lakes - Lvl 3", "abyss_03", 116, 27);
 			EndNode();
@@ -782,8 +782,8 @@ OnStartNPC:
 				AddMap("Lighthalzen Dungeons - Lvl 1", "lhz_dun01", 150, 288);
 				AddMap("Lighthalzen Dungeons - Lvl 2", "lhz_dun02", 150, 18);
 				AddMap("Lighthalzen Dungeons - Lvl 3", "lhz_dun03", 140, 130);
-				AddMap("Lighthalzen Dungeons - Lvl 3", "lhz_dun04", 140, 130);
-				AddMap("Lighthalzen Dungeons - Lvl 3", "lhz_dun05", 140, 130);
+				AddMap("Lighthalzen Dungeons - Lvl 4", "lhz_dun04", 140, 130);
+				AddMap("Lighthalzen Dungeons - Lvl 5", "lhz_dun05", 140, 130);
 			EndNode();
 			StartNode("Louyang Dungeons", "Zeny", 1000);
 				AddMap("The Royal Tomb", "lou_dun01", 218, 196);

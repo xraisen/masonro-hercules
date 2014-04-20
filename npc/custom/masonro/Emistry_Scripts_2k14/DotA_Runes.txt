@@ -47,6 +47,7 @@ setarray .Names$[1],
 				"    Haste";		//	Improve Movement Speed
 			
 // Random Coordinate where NPC will Shown Again
+
 setarray .CoordinateX[0],150,155;
 setarray .CoordinateY[0],175,175;
 

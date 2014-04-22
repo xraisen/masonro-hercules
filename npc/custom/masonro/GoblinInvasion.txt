@@ -86,7 +86,7 @@ StepTwo:
 					mes "The event will start now.";
 					close2;
 					set #KAFRAPOINTS, #KAFRAPOINTS + 1000;
-					getitem 7539,5; 
+					getitem 7539,3; 
 					dispbottom "Ten \"100 Point Coin\" has been deducted.";
 					dispbottom "Total free cash points " + #KAFRAPOINTS;
 					set $sponsor$, strcharinfo(0);
@@ -119,7 +119,7 @@ StepTwo:
 					mes "The event will stop now.";
 					close2;
 					set #KAFRAPOINTS, #KAFRAPOINTS + 1000;
-					getitem 7539,5; 
+					getitem 7539,3; 
 					dispbottom "Ten \"100 Point Coin\" has been deducted.";
 					dispbottom "Total free cash points " + #KAFRAPOINTS;
 					set $sponsor$, strcharinfo(0);

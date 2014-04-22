@@ -1,0 +1,632 @@
+//============  Script =======================================//
+//=      Flower Event                                        =//
+//===== By: ==================================================//
+//= AnimaL Sina	for NpcMakerRO                               =//
+//===== Current Version: =====================================//
+//= 1.1                                                      =//
+//===== Compatible With: =====================================//
+//= eAthena Trunk/Stable SQL/TxT                             =//
+//===== Description: =========================================//
+//= A nicely event where 2 party fight for destroy a Flower  =//
+//= with many HP who destroy for first will win the minigame =//
+//===== Additional Comments: =================================//
+// I don't remember if ancbattle will be official map or..	  //
+// then if someone need ancbattle map just tell me in forum	  //
+// and i will post it ^-^	  								  //
+//============================================================//
+eden_in01,309,34,4	script	Flower Fight#1@flowerft	470,{
+if (.ownerOfTheEvent$ == strcharinfo(0)) goto startAfter;
+if(.onEvent == 0 && getgmlevel() <= 4) {
+autoStartEvent:
+	mes "[^FF9900Flower Fight^000000]";
+	mes "To start or stop the event, I will be charging you Ten ^0000FF \"100 Point Coin\"^000000 worth.";
+	next;
+	mes "[^FF9900Flower Fight^000000]";
+	mes "What would you like to do " +strcharinfo(0) +"?";
+	next;
+	switch(select("Start Event:Stop Event")) {	
+	case 1:		
+		if(.onGoingEvent == 1) {
+			mes "Event is still going on. ^0000FFStop^000000 the event instead of starting.";
+			close2;
+			dispbottom "No \"100 Point Coin\" has been deducted.";
+			end;
+		}
+		getinventorylist;
+		for(set .@i,0; .@i < @inventorylist_count; set .@i,.@i+1){
+			if(@inventorylist_id[.@i] == 26000){ 
+				set .@getCoin, @inventorylist_amount[.@i];
+			}
+		}
+		if (.@getCoin >= 10 || getgmlevel() >= 5) {
+			if (!getgmlevel() >= 5) delitem 26000,10;
+			mes "[^FF9900Flower Fight^000000]";
+			mes "Thank you for the sponsorship. You will be recieving a 1,000 a free cash points and a 5 Poring coin.";
+			next;
+			mes "[^FF9900Flower Fight^000000]";
+			mes "The event will start now.";
+			close2;
+			set #KAFRAPOINTS, #KAFRAPOINTS + 1000;
+			getitem 7539,3; 
+			dispbottom "Ten \"100 Point Coin\" has been deducted.";
+			dispbottom "Total free cash points " + #KAFRAPOINTS;
+			set $sponsor$, strcharinfo(0);
+			set .ownerOfTheEvent$, strcharinfo(0);
+			set .onEvent, 1;			
+			announce "[ Flower Fight Event ]: Get ready! The event is about to start!", bc_all;
+			goto startAfter;
+		}
+		else {
+		mes "[^FF9900Flower Fight^000000]";
+		mes "You dont have enough ^0000FF\"100 Point Coin\"^000000 to start the event.";
+		close;
+		}
+	case 2:
+		if(.onGoingEvent == 0) {
+			mes "The Event is not running. ^0000FFStart^000000 the event instead of stopping.";
+			close2;
+			dispbottom "No \"100 Point Coin\" has been deducted.";
+			end;
+		}
+		getinventorylist;
+		for(set .@i,0; .@i < @inventorylist_count; set .@i,.@i+1){
+			if(@inventorylist_id[.@i] == 26000){ 
+				set .@getCoin, @inventorylist_amount[.@i];
+			}
+		}
+		if (.@getCoin >= 10 || getgmlevel() >= 5) {
+			if (!getgmlevel() >= 5) delitem 26000,10;
+			mes "[^FF9900Flower Fight^000000]";
+			mes "Thank you for the sponsorship. You will be recieving a 1,000 a free cash points and a 5 Poring coin.";
+			next;
+			mes "[^FF9900Flower Fight^000000]";
+			mes "The event will stop now.";
+			close2;
+			set #KAFRAPOINTS, #KAFRAPOINTS + 1000;
+			getitem 7539,3; 
+			dispbottom "Ten \"100 Point Coin\" has been deducted.";
+			dispbottom "Total free cash points " + #KAFRAPOINTS;
+			set $sponsor$, strcharinfo(0);			
+			set .ownerOfTheEvent$, "";
+			set .onEvent, 0;
+			set .onGoingEvent, 0;
+			goto nowinner;
+		}
+		else {
+		mes "[^FF9900Flower Fight^000000]";
+		mes "You dont have enough ^0000FF\"100 Point Coin\"^000000 to start the event.";
+		close;
+		}
+	}
+	end;
+}
+
+if (.onEvent == 1 ) {
+mes "[^FF9900Flower Fight^000000]";
+mes "Sorry, the event does not start yet. Please wait for your turn. Thank you.";
+close;
+}
+else if (.onEvent == 0 && getgmlevel() >= 5 && .onGoingEvent == 1) {
+	mes "[^FF9900Flower Fight^000000]";
+	mes "Wanna ^0000FFStop^000000 the Event GM " + strcharinfo(0) + "?";
+	if(select("No:Yes")==1) close;
+	close2;		
+	set .ownerOfTheEvent$, "";
+	set .onEvent, 0;
+	set .onGoingEvent, 0;
+	goto nowinner;
+}
+else if (.onEvent == 0 && getgmlevel() >= 5 && .onGoingEvent == 0) {
+	mes "[^FF9900Flower Fight^000000]";
+	mes "Wanna ^0000FFStart^000000 the Event GM " + strcharinfo(0) + "?";
+	if(select("No:Yes")==1) close;
+	close2;
+	set $sponsor$, strcharinfo(0);
+	set .ownerOfTheEvent$, strcharinfo(0);
+	set .onEvent, 1;			
+	announce "[ Flower Fight Event ]: Get ready! The event is about to start!", bc_all;
+	goto startAfter;
+}
+
+
+startAfter:
+	if(.ownerOfTheEvent$ == strcharinfo(0) && .onEvent == 1 ){
+
+			mes "What you want do?";
+			menu "Join in Commands",-,"Reset Parties",rparty1,"Hide/Show Npc "+.color$[.show],shi,"Nothing",nothx;
+
+			mes " - + - [ C o m m a n d s ] - + - ";
+			mes "Choose a command";
+			next;
+			menu "Start Game",startevent,"Open/Close Registration"+.color$[.perm],registr,"Nothing",nothx;
+			close;
+
+		}
+// break
+
+startevent:
+	if(.perm==0){
+		mes "You can't start a game if you have no parties registered.";
+		mes "Do you want to activate it?";
+		set .@w, select("Activate:Deactivate");
+		close2;
+		if(.@w==1){
+			set .perm, 1;
+			dispbottom "It is now Activated.";
+			announce "[ Flower Fight Event ]: Party registration is now OPEN!",bc_yellow;
+		}
+		end;
+		
+	}
+	if(!$@regiparty[1]||!$@regiparty[2]){
+		mes "Must be signed all two party for start..";
+		close;
+	}
+
+	mes "Let's go";
+	mes "(Sure?)";
+	set .@w, select("Yes:No");
+	if(.@w==2) { dispbottom "Missing action"; close; }
+	else close2;
+autoRunBy:		
+	
+	if (.autoEvent == 1) {
+	set .autoEvent,0;
+	}
+	else { set .ownerOfTheEvent$, "";
+	}
+	initnpctimer;
+	end;
+	
+	OnTimer2000:
+	set .onGoingEvent, 1;
+	announce "[ Flower Fight Event ]: The Flower Fighting Will start early!",bc_all;
+	killmonster "1@flowerft","All";
+	end;
+
+	OnTimer8000:
+	if(.onEvent == 1) {
+	announce "Event is sponsored by: " + $sponsor$ ,bc_all,0xFFFF00;
+	}
+	set $sponsor$,"";	
+	end;
+	
+	OnTimer12000:
+		for(set .@a,1; .@a<=2; set .@a, .@a + 1){
+		getpartymember $@regiparty[.@a],2;
+		if (.@a == 1) set .@reg1$, .@reg1$ + " | * " + $@partymembercount+" * |  VS ";
+		if (.@a > 1) set .@reg1$, .@reg1$ + " | * " + $@partymembercount+" * | ";
+			
+		}
+		announce "Party are "+.@reg1$+" Fighters",bc_all;
+		end;
+
+
+	OnTimer20000:
+	//Barriere 1
+	monster "1@flowerft",48,26,"Barrier",1906,1,"Flower Fight#1@flowerft::OnBarriera1";
+	monster "1@flowerft",49,26,"Barrier",1906,1,"Flower Fight#1@flowerft::OnBarriera2";
+	monster "1@flowerft",50,26,"Barrier",1906,1,"Flower Fight#1@flowerft::OnBarriera3";
+	monster "1@flowerft",51,26,"Barrier",1906,1,"Flower Fight#1@flowerft::OnBarriera4";
+	//Barriere 2
+	monster "1@flowerft",48,73,"Barrier",1906,1,"Flower Fight#1@flowerft::OnBarriera5";
+	monster "1@flowerft",49,73,"Barrier",1906,1,"Flower Fight#1@flowerft::OnBarriera6";
+	monster "1@flowerft",50,73,"Barrier",1906,1,"Flower Fight#1@flowerft::OnBarriera7";
+	monster "1@flowerft",51,73,"Barrier",1906,1,"Flower Fight#1@flowerft::OnBarriera8";
+
+	//Block 1
+	setcell "1@flowerft",48,25,48,25,cell_walkable,0;
+	setcell "1@flowerft",49,25,49,25,cell_walkable,0;
+	setcell "1@flowerft",50,25,50,25,cell_walkable,0;
+	setcell "1@flowerft",51,25,51,25,cell_walkable,0;
+
+	setcell "1@flowerft",25,51,25,51,cell_walkable,0;
+	setcell "1@flowerft",25,50,25,50,cell_walkable,0;
+	setcell "1@flowerft",25,49,25,49,cell_walkable,0;
+	setcell "1@flowerft",25,48,25,48,cell_walkable,0;
+
+	//Block 2
+	setcell "1@flowerft",48,74,48,74,cell_walkable,0;
+	setcell "1@flowerft",49,74,49,74,cell_walkable,0;
+	setcell "1@flowerft",50,74,50,74,cell_walkable,0;
+	setcell "1@flowerft",51,74,51,74,cell_walkable,0;
+
+	setcell "1@flowerft",74,48,74,48,cell_walkable,0;
+	setcell "1@flowerft",74,49,74,49,cell_walkable,0;
+	setcell "1@flowerft",74,50,74,50,cell_walkable,0;
+	setcell "1@flowerft",74,51,74,51,cell_walkable,0;
+
+	announce "[ Flower Fight Event ]: Get ready for the Global Warp",bc_yellow;
+	end;
+
+	OnTimer23000:
+	getpartymember $@regiparty[1],2;
+	for(set .@a,0; .@a<$@partymembercount; set .@a,.@a+1){
+		attachrid ($@partymemberaid[.@a]);
+		getmapxy(.tmpMap$,.tmpx,.tmpy,0);
+		savepoint .tmpMap$,.tmpx,.tmpy; 
+		sleep2 500;
+		warp "1@flowerft",11,50;
+		detachrid;
+	}
+
+	getpartymember $@regiparty[2],2;
+	for(set .@b,0; .@b<$@partymembercount; set .@b,.@b+1){
+		attachrid ($@partymemberaid[.@b]);
+		getmapxy(.tmpMap$,.tmpx,.tmpy,0);
+		savepoint .tmpMap$,.tmpx,.tmpy; 
+		sleep2 500;
+		warp "1@flowerft",89,50;
+		detachrid;
+	}
+	end;
+
+	OnTimer40000:
+	announce "[ Flower Fight Event ]: The Flowers are Spawned! Start fight!",bc_yellow;
+	pvpon "1@flowerft";
+	set .onEvent,0;
+	set .startgame,1;
+	//Flower
+	monster "1@flowerft",50,92,"Flower "+getpartyname($@regiparty[2]),2695,1,"Flower Fight#1@flowerft::OnKill1";
+	monster "1@flowerft",50,7,"Flower "+getpartyname($@regiparty[1]),2695,1,"Flower Fight#1@flowerft::OnKill2";
+	setcell "1@flowerft",74,48,74,48,cell_walkable,1;
+	setcell "1@flowerft",74,49,74,49,cell_walkable,1;
+	setcell "1@flowerft",74,50,74,50,cell_walkable,1;
+	setcell "1@flowerft",74,51,74,51,cell_walkable,1;
+
+	setcell "1@flowerft",25,51,25,51,cell_walkable,1;
+	setcell "1@flowerft",25,50,25,50,cell_walkable,1;
+	setcell "1@flowerft",25,49,25,49,cell_walkable,1;
+	setcell "1@flowerft",25,48,25,48,cell_walkable,1;
+	end;
+
+registr:
+	mes "Party registration?";
+	next;
+	if ($@regiparty[1]&&$@regiparty[2]) { 
+	mes "You cant Open a registration if two parties have registered.";
+	mes "^0000FFReset^000000 the party before you open it up again.";
+	close;
+	}
+		if(.perm==1) set .@e, select("Close:Nothing");
+		else if(.perm==0) set .@e, select("Open:Nothing");
+
+		if(.@e==2) goto nothx;
+	close2;
+	if(.perm==1) {
+		set .perm, 0;
+		announce "[ Flower Fight Event ]: Party registration is now CLOSED!",bc_yellow;
+	}
+	else if(.perm==0) {
+		set .perm, 1; 
+		announce "[ Flower Fight Event ]: Party registration is now OPEN!",bc_yellow;
+	}
+	end;
+
+nothx:
+	mes "Bye";
+	close;
+
+player:
+	if(.perm==0) end;
+	set @regi,getcharid(1);
+	mes "Welcome in event";
+	mes "Now we will begin the registration.";
+	if($@regiparty[1]||$@regiparty[2]){
+		mes "Just now the parties signed are:";
+		  if($@regiparty[1]) {
+			mes "^00FF00"+getpartyname($@regiparty[1])+"^000000";
+			getpartymember $@regiparty[1],2;
+			mes "Party Member:";
+			for(set .@c,0; .@c<$@partymembercount; set .@c,.@c+1){
+				set $partID$, $@partymemberaid[.@c];
+				mes $partID$;
+			}
+			mes " -------------- ";
+
+			}
+		  if($@regiparty[2]) {
+			mes "^00FF00"+getpartyname($@regiparty[2])+"^000000";
+			getpartymember $@regiparty[2],2;
+			mes "Party Member:";
+			for(set .@d,0; .@d<$@partymembercount; set .@d,.@d+1){
+				set $partID$, $@partymemberaid[.@d];
+				mes $partID$;
+			}
+			mes " -------------- ";
+
+			}
+		}
+		close2;
+		
+	if(@regi==$@regiparty[1]||@regi==$@regiparty[2]){
+		if(getpartyname(@regi) != "null") {
+			dispbottom "You are in the party: '"+getpartyname(@regi)+"'";
+		}
+		if(!.startgame) end;
+
+	if(@regi==$@regiparty[1]) warp "1@flowerft",11,50;
+	if(@regi==$@regiparty[2]) warp "1@flowerft",89,50;
+
+	}
+
+	if($@regiparty[1]&&$@regiparty[2]) end;
+	if(getpartyleader(getcharid(1)) != strcharinfo(0)) end;
+	if(getpartyleader(getcharid(1)) == getpartyleader($@regiparty[1])) {
+		dispbottom "You have already registered your party";
+		end;
+	}
+
+	if(!$@regiparty[1])
+		set $@regiparty[1],getcharid(1);
+		else
+		set $@regiparty[2],getcharid(1);
+	end;
+
+rparty1:
+	if (!$@regiparty[1]||!$@regiparty[2]) { 
+	mes "You cant reset if no party have registered.";
+	mes "^0000FFOpen^000000 the registration and fill the party both before you can reset it up again.";
+	close;
+	}
+	mes "Party reset";
+	announce "[ Flower Fight Event ]: Registered party has been RESET. You may register again.",bc_yellow;
+	close2;
+	deletearray $@regiparty[0],255;
+	end;
+
+winner:
+	announce "[ Flower Fight Event ]: Congratulations to the winner!",bc_yellow;
+	pvpoff "1@flowerft"; 
+	sleep 5000;
+	announce "[ Flower Fight Event ]: The winning party is [ "+getpartyname($@regiparty[.@win])+" ] Team!",bc_yellow;
+	sleep 5000;
+	announce "[ Flower Fight Event ]: " +.breaker$+ " broke the Flower first!",bc_yellow;
+	sleep 5000;
+	mapwarp "1@flowerft","eden_in01",312,34;
+	getpartymember $@regiparty[1],2;
+	for(set .@a,0; .@a<$@partymembercount; set .@a,.@a+1){
+		attachrid ($@partymemberaid[.@a]);
+		atcommand "@return";
+		detachrid;
+	}
+
+	getpartymember $@regiparty[2],2;
+	for(set .@b,0; .@b<$@partymembercount; set .@b,.@b+1){
+		attachrid ($@partymemberaid[.@b]);
+		atcommand "@return";
+		detachrid;
+	}
+	
+	set .perm,0;
+	set .onEvent, 0;
+	set .onGoingEvent, 0;
+	set .autoEvent, 0;
+	disablenpc "Flower Fight#Warper";
+	set .show, 0;
+	stopnpctimer;
+	deletearray $@regiparty[0],255;
+	killmonster "1@flowerft","Flower Fight#1@flowerft::OnKill1";
+	killmonster "1@flowerft","Flower Fight#1@flowerft::OnKill2";
+	killmonster "1@flowerft","Flower Fight#1@flowerft::OnBarriera1";
+	killmonster "1@flowerft","Flower Fight#1@flowerft::OnBarriera2";
+	killmonster "1@flowerft","Flower Fight#1@flowerft::OnBarriera3";
+	killmonster "1@flowerft","Flower Fight#1@flowerft::OnBarriera4";
+	end;
+		
+OnTimer1800000:		
+nowinner:
+	if (.autoEvent == 1) {
+	announce "[ Flower Fight Event ]: Time is up! Unfortunately, the condition is not fullfilled. The event will close now. ",bc_all;
+	set .autoEvent, 0;
+	}
+	else {
+	announce "[ Flower Fight Event ]: Time is up! Unfortunately, we have no winner. The event will now close.",bc_all;
+	}
+	pvpoff "1@flowerft";
+	sleep 10000;
+	mapwarp "1@flowerft","eden_in01",312,34;
+	getpartymember $@regiparty[1],2;
+	for(set .@a,0; .@a<$@partymembercount; set .@a,.@a+1){
+		attachrid ($@partymemberaid[.@a]);
+		atcommand "@return";
+		detachrid;
+	}
+
+	getpartymember $@regiparty[2],2;
+	for(set .@b,0; .@b<$@partymembercount; set .@b,.@b+1){
+		attachrid ($@partymemberaid[.@b]);
+		atcommand "@return";
+		detachrid;
+	}
+	set .perm,0;
+	set .onEvent, 0;
+	set .onGoingEvent, 0;
+	disablenpc "Flower Fight#Warper";
+	set .show, 0;
+	stopnpctimer;
+	deletearray $@regiparty[0],255;
+	killmonster "1@flowerft","Flower Fight#1@flowerft::OnKill1";
+	killmonster "1@flowerft","Flower Fight#1@flowerft::OnKill2";
+	killmonster "1@flowerft","Flower Fight#1@flowerft::OnBarriera1";
+	killmonster "1@flowerft","Flower Fight#1@flowerft::OnBarriera2";
+	killmonster "1@flowerft","Flower Fight#1@flowerft::OnBarriera3";
+	killmonster "1@flowerft","Flower Fight#1@flowerft::OnBarriera4";	
+	end;
+
+OnKill1:
+	set .@win,1;
+	set .breaker$, strcharinfo(0);
+	goto winner;
+	end;
+OnKill2:
+	set .@win,2;
+	set .breaker$, strcharinfo(0);
+	goto winner;
+	end;
+
+OnBarriera1:
+	announce "Barricade 1 - [Party: "+getpartyname($@regiparty[2])+"] - Destroyed",bc_blue;
+	setcell "1@flowerft",48,25,48,25,cell_walkable,1;
+	end;
+OnBarriera2:
+	announce "Barricade 2 - [Party: "+getpartyname($@regiparty[2])+"] - Destroyed",bc_blue;
+	setcell "1@flowerft",49,25,49,25,cell_walkable,1;
+	end;
+OnBarriera3:
+	announce "Barricade 3 - [Party: "+getpartyname($@regiparty[2])+"] - Destroyed",bc_blue;
+	setcell "1@flowerft",50,25,50,25,cell_walkable,1;
+	end;
+OnBarriera4:
+	announce "Barricade 4 - [Party: "+getpartyname($@regiparty[2])+"] - Destroyed",bc_blue;
+	setcell "1@flowerft",51,25,51,25,cell_walkable,1;
+	end;
+OnBarriera5:
+	announce "Barricade 1 - [Party: "+getpartyname($@regiparty[1])+"] - Destroyed",bc_blue;
+	setcell "1@flowerft",48,74,48,74,cell_walkable,1;
+	end;
+OnBarriera6:
+	announce "Barricade 2 - [Party: "+getpartyname($@regiparty[1])+"] - Destroyed",bc_blue;
+	setcell "1@flowerft",49,74,49,74,cell_walkable,1;
+	end;
+OnBarriera7:
+	announce "Barricade 3 - [Party: "+getpartyname($@regiparty[1])+"] - Destroyed",bc_blue;
+	setcell "1@flowerft",50,74,50,74,cell_walkable,1;
+	end;
+OnBarriera8:
+	announce "Barricade 4 - [Party: "+getpartyname($@regiparty[1])+"] - Destroyed",bc_blue;
+	setcell "1@flowerft",51,74,51,74,cell_walkable,1;
+	end;
+	
+shi:
+	if (.autoEvent == 0) {
+	mes "Npc : "+.color$[.show];
+	close2;
+	}
+	if(.show==1)	set .show, 0;
+	else if(.show==0)	set .show, 1;
+	if(.show==0) {
+	disablenpc "Flower Fight#Warper";
+	announce "[ Flower Fight Event ]: The NPC Warper is now unavailable (Prontera).",bc_all;
+	}
+	else if(.show==1) { 
+	enablenpc "Flower Fight#Warper";
+	announce "[ Flower Fight Event ]: The NPC Warper is now available (Prontera).",bc_all;
+	}
+	end;
+	
+OnInit:
+	setarray .color$[0],"^FF0000[Close]^000000","^00FF00[Open]^000000";
+	disablenpc "Flower Fight#Warper";
+	setcell "1@flowerft",35,70,35,75,cell_shootable,0;
+	setcell "1@flowerft",28,66,31,66,cell_shootable,0;
+	setcell "1@flowerft",68,33,71,33,cell_shootable,0;
+	setcell "1@flowerft",64,24,64,29,cell_shootable,0;
+	end;
+
+OnSat0900:
+OnSat1900:	// automated events
+	if (.autoEvent == 0) set .autoEvent,1;
+	set .onEvent, 1;
+	set .onGoingEvent, 1;
+	announce "[ Flower Fight Event ]: Get ready! The event is about to start!", bc_all;
+	end;
+OnSat0901:
+OnSat1901:	
+	set .show, 0;
+	goto shi;
+	end;
+OnSat0902:
+OnSat1902:	
+	set .perm, 1;
+	announce "[ Flower Fight Event ]: Party registration is now OPEN!",bc_yellow;
+	sleep2 5000;
+	announce "[ Flower Fight Event ]: You have 5 mins to prepare.",bc_yellow;
+	sleep2 5000;
+	announce "[ Flower Fight Event ]: If the condition is fullfilled, the fight will start.",bc_yellow;
+	end;
+OnSat0907:
+OnSat1907:
+	if($@regiparty[1]&&$@regiparty[2]) {	
+	goto autoRunBy;
+	}
+	else {
+	goto nowinner;
+	}
+	
+	end;
+}
+
+prontera,168,179,1	script	Flower Fight#Warper	470,{
+if (getvariableofnpc(.perm,"Flower Fight#1@flowerft") == 1)
+	
+	set @regi,getcharid(1);
+	mes "[^FF9900Flower Fight^000000]";
+	mes "Welcome to the event";
+	mes "Now we will begin the registration.";
+	if($@regiparty[1]||$@regiparty[2]){
+		mes "Just now the parties signed are:";
+		  if($@regiparty[1]) {
+			mes "^00FF00"+getpartyname($@regiparty[1])+"^000000";
+			getpartymember $@regiparty[1],2;
+			mes "Party Member:";
+			for(set .@c,0; .@c<$@partymembercount; set .@c,.@c+1){
+				set $partID$, $@partymemberaid[.@c];
+				mes $partID$;
+			}
+			mes " -------------- ";
+
+			}
+		  if($@regiparty[2]) {
+			mes "^00FF00"+getpartyname($@regiparty[2])+"^000000";
+			getpartymember $@regiparty[2],2;
+			mes "Party Member:";
+			for(set .@d,0; .@d<$@partymembercount; set .@d,.@d+1){
+				set $partID$, $@partymemberaid[.@d];
+				mes $partID$;
+			}
+			mes " -------------- ";
+
+			}
+		}
+		close2;
+	if (getvariableofnpc(.perm,"Flower Fight#1@flowerft") == 0) end;
+	
+	if(@regi==$@regiparty[1]||@regi==$@regiparty[2]){
+		if(getpartyname(@regi) != "null") {
+			dispbottom "You are in a party '"+getpartyname(@regi)+"'";
+		}
+		if(!.startgame) end;
+
+	if(@regi==$@regiparty[1]) warp "1@flowerft",11,50;
+	if(@regi==$@regiparty[2]) warp "1@flowerft",89,50;
+
+	}
+
+	if($@regiparty[1]&&$@regiparty[2]) end;
+	if(getpartyleader(getcharid(1)) != strcharinfo(0)) end;
+	if(getpartyleader(getcharid(1)) == getpartyleader($@regiparty[1])) {
+		dispbottom "You have already registered your party";
+		end;
+	}
+
+	if(!$@regiparty[1])
+		set $@regiparty[1],getcharid(1);
+		else
+		set $@regiparty[2],getcharid(1);
+		
+	if ($@regiparty[1]&&$@regiparty[2]) {
+		announce "[ Flower Fight Event ]: Registration completed. Two parties have registered.",bc_all;
+		set .perm, 0;
+		sleep2 5000;
+		announce "[ Flower Fight Event ]: Party registration is now CLOSE!",bc_yellow;
+	}
+	end;
+}
+
+1@flowerft	mapflag	pvp_noguild
+1@flowerft	mapflag	nomemo
+1@flowerft	mapflag	noteleport
+1@flowerft	mapflag	nowarp
+1@flowerft	mapflag	nowarpto
+1@flowerft	mapflag	nobranch

@@ -1,0 +1,203 @@
+//============================================================ 
+//= [ Find The Poring ]:  Event
+//===== By: ================================================== 
+//= Havizch
+//===== Current Version: ===================================== 
+//= 1.0
+//===== Description: ========================================= 
+//= Event where players find a poring masked by thousands of other poring-like mobs!
+//===== Additional Comments: ================================= 
+//= + Players only get 3 chances to avoid people just killing
+//============================================================ 
+
+eden_in01,303,34,4	script	Find The Poring Starter	730,{	
+if(getgmlevel()<=4){
+	mes "[^FF9900Find The Poring^000000]";
+	mes "To start or stop the event, I will be charging you Ten ^0000FF \"100 Point Coin\"^000000 worth.";
+	next;
+	mes "[^FF9900Find The Poring^000000]";
+	mes "What would you like to do " +strcharinfo(0) +"?";
+	next;
+	switch(select("Start Event:Stop Event")) {	
+	case 1:		
+		if(.FTP_Lock == 1) {
+			mes "Event is still going on. ^0000FFStop^000000 the event instead of starting.";
+			close2;
+			dispbottom "No \"100 Point Coin\" has been deducted.";
+			end;
+		}
+		getinventorylist;
+		for(set .@i,0; .@i < @inventorylist_count; set .@i,.@i+1){
+			if(@inventorylist_id[.@i] == 26000){ 
+				set .@getCoin, @inventorylist_amount[.@i];
+			}
+		}
+		if (.@getCoin >= 10) {
+			delitem 26000,10;
+			mes "[^FF9900Find The Poring^000000]";
+			mes "Thank you for the sponsorship. You will be recieving a 1,000 a free cash points and a 5 Poring coin.";
+			next;
+			mes "[^FF9900Find The Poring^000000]";
+			mes "The event will start now.";
+			set #KAFRAPOINTS, #KAFRAPOINTS + 1000;
+			getitem 7539,3; 
+			dispbottom "Ten \"100 Point Coin\" has been deducted.";
+			dispbottom "Total free cash points " + #KAFRAPOINTS;
+			close2;
+			set $sponsor$, strcharinfo(0);
+			set .FTP_Lock,1;
+			goto FTP_activate;
+		}
+		else {
+		mes "[^FF9900Find The Poring^000000]";
+		mes "You dont have enough ^0000FF\"100 Point Coin\"^000000 to start the event.";
+		close;
+		}
+	case 2:
+		if(.FTP_Lock == 0) {
+			mes "The Event is not running. ^0000FFStart^000000 the event instead of stopping.";
+			close2;
+			dispbottom "No \"100 Point Coin\" has been deducted.";
+			end;
+		}
+		getinventorylist;
+		for(set .@i,0; .@i < @inventorylist_count; set .@i,.@i+1){
+			if(@inventorylist_id[.@i] == 26000){ 
+				set .@getCoin, @inventorylist_amount[.@i];
+			}
+		}
+		if (.@getCoin >= 10) {
+			delitem 26000,10;
+			mes "[^FF9900Find The Poring^000000]";
+			mes "Thank you for the sponsorship. You will be recieving a 1,000 a free cash points and a 5 Poring coin.";
+			next;
+			mes "[^FF9900Find The Poring^000000]";
+			mes "The event will stop now.";
+			set #KAFRAPOINTS, #KAFRAPOINTS + 1000;
+			getitem 7539,3; 
+			dispbottom "Ten \"100 Point Coin\" has been deducted.";
+			dispbottom "Total free cash points " + #KAFRAPOINTS;
+			close2;
+			set $sponsor$, strcharinfo(0);
+			set .FTP_Lock,0;
+			goto FTP_deactivate;
+		}
+		else {
+		mes "[^FF9900Find The Poring^000000]";
+		mes "You dont have enough ^0000FF\"100 Point Coin\"^000000 to start the event.";
+		close;
+		}
+	}
+	end;
+}
+else if(getgmlevel()>=5){
+
+		if (.FTP_Lock == 1 && getgmlevel() >= 5) {
+			mes "[^FF9900Find The Poring^000000]";
+			mes "Wanna ^0000FFStop^000000 the Event GM " + strcharinfo(0) + "?";
+			if(select("No:Yes")==1) close;
+			close2;
+			set .FTP_Lock,0;
+			goto FTP_deactivate;
+		}
+		else if (.FTP_Lock == 0 && getgmlevel() >= 5) {
+			mes "[^FF9900Find The Poring^000000]";
+			mes "Wanna ^0000FFStart^000000 the Event GM " + strcharinfo(0) + "?";
+			if(select("No:Yes")==1) close;
+			close2;
+			set $sponsor$, strcharinfo(0);
+			set .FTP_Lock,1;
+			goto FTP_activate;
+		}
+}
+
+	FTP_activate:
+OnFri0900:
+OnFri1900:
+	set .FTP_Lock,1;
+	//Announcements
+	enablenpc "Find The Poring";
+	announce "[ Find The Poring ]: Event is going to start in 5 minutes!",0;
+	sleep2 2000;
+	if(.FTP_Lock == 0) end;
+	announce "[ Find The Poring ]: Talk to the Event Warper (Prontera) to participate!",0;
+	sleep2 240000;
+	if(.FTP_Lock == 0) end;
+	announce "[ Find The Poring ]: Begins in 1 minute!",0;
+	sleep2 60000;
+	if(.FTP_Lock == 0) end;
+	announce "[ Find The Poring ]: is now starting!",0;	
+	sleep2 5000;
+	if(.FTP_Lock == 0) end;
+	if ($sponsor$ != "") {
+	announce "Event is sponsored by: " + $sponsor$ ,bc_all,0xFFFF00;
+	}
+	set $sponsor$,"";
+	disablenpc "Find The Poring";
+	sleep2 5000;
+	if(.FTP_Lock == 0) end;
+	mapannounce "pvp_y_1-5","The title says it all, [ Find The Poring ]: ! There's other colored poring in the map that are here to trick you",0;
+	sleep2 3000;
+	if(.FTP_Lock == 0) end;
+	mapannounce "pvp_y_1-5","Win by killing the Pink Poring. Be careful though, you only get 3 chances!",0;
+	sleep2 3000;
+	if(.FTP_Lock == 0) end;
+	mapannounce "pvp_y_1-5","GO!",0;
+	monster "pvp_y_1-5",0,0,"Drops",1113,1000,"FTP_Sys::OnMobDeath";
+	monster "pvp_y_1-5",0,0,"Marin",1242,1000,"FTP_Sys::OnMobDeath";
+	monster "pvp_y_1-5",0,0,"Santa Poring",1062,1000,"FTP_Sys::OnMobDeath";
+	monster "pvp_y_1-5",0,0,"Metaling",1613,1000,"FTP_Sys::OnMobDeath";
+	monster "pvp_y_1-5",0,0,"Stapo",1784,1000,"FTP_Sys::OnMobDeath";
+	monster "pvp_y_1-5",0,0,"Poring",1002,1,"FTP_Sys::OnWinMobDeath";
+	enablenpc "FTP_Sys";
+	end;
+	
+	FTP_deactivate:
+	set .FTP_Lock,0;
+	disablenpc "Find The Poring";
+	announce "[ Find The Poring ]: Event ended unexpectedly!",bc_all;
+	mapannounce "pvp_y_1-5","[ Find The Poring ]:  Event ended unexpectedly",0;
+	mapwarp "pvp_y_1-5","eden_in01",306,35;
+	killmonsterall "pvp_y_1-5";
+	end;
+
+OnInit:
+disablenpc "FTP_Sys";
+disablenpc "Find The Poring";
+}
+
+pvp_y_1-5,0,0,5	script	FTP_Sys	-1,{
+end;
+OnMobDeath:
+	set @FTPChance,@FTPChance+1;
+	if(@FTPChance>=3){ warp "eden_in01",306,35; dispbottom "You've run out of chances!"; disablenpc "Find The Poring"; end; }
+	dispbottom "Wrong Monster! You have "+(3-@FTPChance)+" chance's left";
+	end;
+	
+OnWinMobDeath:
+	announce "pvp_y_1-5","[ "+strcharinfo(0)+" ] has found the poring!",bc_all;
+	disablenpc "Find The Poring";
+	//Reward
+	
+	getitem 7539,5;
+	getitem 675,3;
+	getitem 671,2;
+	getitem 674,1;
+	
+	mapwarp "pvp_y_1-5","eden_in01",306,35;
+	killmonsterall "pvp_y_1-5";
+}
+
+prontera,170,181,4	script	Find The Poring	730,{
+	mes "^0000FF[ Find The Poring ]^000000";
+	mes "Do you wanna join the event?";
+	switch(select("Yes","No")){
+		case 1:
+			warp "pvp_y_1-5",0,0;
+			end;
+			break;
+		case 2:
+			close;
+			break;
+	}
+}

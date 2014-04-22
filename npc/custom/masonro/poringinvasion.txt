@@ -1,0 +1,260 @@
+eden_in01,315,34,4	script	Poring Invasion	909,{
+	set .@getCoin, 0;	
+	if (getgmlevel() <= 4) {
+	mes "[^FF9900Poring Invasion Starter^000000]";
+	mes "poring poring! ^FF0000~Hi " + strcharinfo(0) + ", Wanna play today?~^000000";
+	mes "poring poring... poring! ^FF0000~Just tell me what to do!~^000000";
+	next;
+	mes "[^FF9900Poring Invasion Starter^000000]";
+	mes "To start or stop the event, I will be charging you Ten ^0000FF\"100 Point Coin\"^000000 worth.";
+	next;
+	mes "[^FF9900Poring Invasion Starter^000000]";
+	mes "What would you like to do " +strcharinfo(0) +"?";
+	next;
+	switch(select("Start Event:Stop Event")) {	
+	case 1:		
+		if(.isStart == 1) {
+			mes "Event is still going on. ^0000FFStop^000000 the event instead of starting.";
+			close2;
+			dispbottom "No \"100 Point Coin\" has been deducted.";
+			end;
+		}
+		getinventorylist;
+		for(set .@i,0; .@i < @inventorylist_count; set .@i,.@i+1){
+			if(@inventorylist_id[.@i] == 26000){ 
+				set .@getCoin, @inventorylist_amount[.@i];
+			}
+		}
+		if (.@getCoin >= 10) {
+			delitem 26000,10;
+			mes "[^FF9900Poring Invasion Starter^000000]";
+			mes "Thank you for the sponsorship. You will be recieving a 1,000 a free cash points and a 5 Poring coin.";
+			next;
+			mes "[^FF9900Poring Invasion Starter^000000]";
+			mes "The event will start now.";
+			close2;
+			set #KAFRAPOINTS, #KAFRAPOINTS + 1000;
+			getitem 7539,3; 
+			dispbottom "Ten \"100 Point Coin\" has been deducted.";
+			dispbottom "Total free cash points " + #KAFRAPOINTS;
+			set $sponsor$, strcharinfo(0);
+			goto L_poringannounce;
+		}
+		else {
+		mes "[^FF9900Poring Invasion Starter^000000]";
+		mes "You dont have enough ^0000FF\"100 Point Coin\"^000000 to start the event.";
+		close;
+		}
+	case 2:
+		if(.isStart == 0) {
+			mes "The Event is not running. ^0000FFStart^000000 the event instead of stopping.";
+			close2;
+			dispbottom "No \"100 Point Coin\" has been deducted.";
+			end;
+		}
+		getinventorylist;
+		for(set .@i,0; .@i < @inventorylist_count; set .@i,.@i+1){
+			if(@inventorylist_id[.@i] == 26000){ 
+				set .@getCoin, @inventorylist_amount[.@i];
+			}
+		}
+		if (.@getCoin >= 10) {
+			delitem 26000,10;
+			mes "[^FF9900Poring Invasion Starter^000000]";
+			mes "Thank you for the sponsorship. You will be recieving a 1,000 a free cash points and a 5 Poring coin.";
+			next;
+			mes "[^FF9900Poring Invasion Starter^000000]";
+			mes "The event will stop now.";
+			close2;
+			set #KAFRAPOINTS, #KAFRAPOINTS + 1000;
+			getitem 7539,3; 
+			dispbottom "\"100 Point Coin\" has been given.";
+			dispbottom "Total free cash points " + #KAFRAPOINTS;
+			set $sponsor$, strcharinfo(0);
+			goto endingevent;
+		}
+		else {
+		mes "[^FF9900Poring Invasion Starter^000000]";
+		mes "You dont have enough ^0000FF\"100 Point Coin\"^000000 to start the event.";
+		close;
+		}
+	}
+	end;
+}
+else if (getgmlevel() >= 5) goto poringadmin;
+	end;
+	
+poringadmin:
+		if (.isStart == 1 && getgmlevel() >= 5) {
+			mes "[^FF9900Poring Invasion Starter^000000]";
+			mes "Wanna ^0000FFStop^000000 the Event GM " + strcharinfo(0) + "?";
+			if(select("No:Yes")==1) close;
+			close2;
+			goto endingevent;
+		}
+		else if (.isStart == 0 && getgmlevel() >= 5) {
+			mes "[^FF9900Poring Invasion Starter^000000]";
+			mes "Wanna ^0000FFStart^000000 the Event GM " + strcharinfo(0) + "?";
+			if(select("No:Yes")==1) close;
+			close2;
+			set $sponsor$, strcharinfo(0);
+			goto L_poringannounce;
+		}
+
+OnSun0900:
+OnSun1900:
+if (.isStart == 1) end;
+
+L_poringannounce:	
+	setmapflag "prontera",mf_nomobloot;
+	set $@EventPorON,1;
+	set $@EventPorONSes,$@EventPorONSes+1;
+	donpcevent "PoringInvasion#evnt3::OnEnable";
+	initnpctimer;
+	set .isStart,1;
+	end;
+
+OnTimer3600000:
+	set .isStart, 0;
+	set $@RoundCountPor,0;
+	killmonster "prontera","All";
+	announce "[ Rune-Midgard Guard ]: Poring forces have been able to overcome. Poring Invasion Event Done!",0;
+	stopnpctimer;
+	removemapflag "prontera",mf_nomobloot;
+	set $@RoundCountPor,0;
+	set $@EventPorON,0;
+	end;
+	
+endingevent:
+	set .isStart, 0;
+	set $@RoundCountPor,0;
+	killmonster "prontera","All";
+	announce "[ Rune-Midgard Guard ]: Poring forces have been able to overcome. Poring Invasion Event Done!",0;
+	stopnpctimer;
+	removemapflag "prontera",mf_nomobloot;
+	set $@RoundCountPor,0;
+	set $@EventPorON,0;
+	set .isStart,0;
+	end;
+}
+
+//--------------------------------------------------
+-	script	PoringInvasion#evnt3	-1,{
+OnEnable:
+announce "[ Rune-Midgard Guard ]: Poring family seems to have started angry because they always been hurt...",0;
+sleep2 5000;
+announce "[ Rune-Midgard Guard ]: It seems today that they have a plan to raid the city of Prontera massively!",0;
+sleep2 5000;
+announce "[ Rune-Midgard Guard ]: They've been not too far from Prontera,",0;
+sleep2 5000;
+announce "[ Rune-Midgard Guard ]: Prepare yourself the Warriors of Rune Midgard!",0;
+sleep2 5000;
+announce "[ Rune-Midgard Guard ]: They have begun approaching ...",0;
+sleep2 5000;
+announce "[ Rune-Midgard Guard ]: and The Prontera Guard really unable to fight it.",0;
+sleep2 5000;
+announce "[ Rune-Midgard Guard ]: They are no longer than usual ...",0;
+sleep2 5000;
+if ($sponsor$ != "") {
+announce "Event is sponsored by: " + $sponsor$ ,bc_all,0xFFFF00;
+}
+set $sponsor$,"";
+sleep2 5000;
+announce "Session " + $@EventPorONSes + " Poring invasion begins!",0;
+	goto L_Start;
+	end;
+	
+L_Start:
+areamonster "prontera",1,1,278,356,"Poring",1002,300,"";
+areamonster "prontera",1,1,278,356,"Poring",1002,3,"PoringInvasionWin::OnMobKilled3";
+areamonster "prontera",1,1,278,356,"Poporing",1031,300,"";
+areamonster "prontera",1,1,278,356,"Poporing",1031,2,"PoringInvasionWin::OnMobKilled3";
+areamonster "prontera",1,1,278,356,"Drops",1113,300,"";
+areamonster "prontera",1,1,278,356,"Drops",1113,3,"PoringInvasionWin::OnMobKilled3";
+areamonster "prontera",1,1,278,356,"Marin",1242,300,"";
+areamonster "prontera",1,1,278,356,"Marin",1242,3,"PoringInvasionWin::OnMobKilled3";
+areamonster "prontera",1,1,278,356,"Metaling",1613,300,"";
+areamonster "prontera",1,1,278,356,"Metaling",1613,3,"PoringInvasionWin::OnMobKilled3";
+areamonster "prontera",1,1,278,356,"Stapo",1784,300,"";
+areamonster "prontera",1,1,278,356,"Stapo",1784,3,"PoringInvasionWin::OnMobKilled3";
+areamonster "prontera",1,1,278,356,"Arc Angeling",1388,10,"";
+areamonster "prontera",1,1,278,356,"Deviling",1582,40,"";
+areamonster "prontera",1,1,278,356,"Deviling",1582,1,"PoringInvasionWin::OnMobKilled2";
+areamonster "prontera",1,1,278,356,"Ghostring",1120,40,"";
+areamonster "prontera",1,1,278,356,"Ghostring",1120,1,"PoringInvasionWin::OnMobKilled1";
+areamonster "prontera",1,1,278,356,"Santa Poring",1062,300,"";
+areamonster "prontera",1,1,278,356,"Santa Poring",1062,3,"PoringInvasionWin::OnMobKilled3";
+areamonster "prontera",1,1,278,356,"Mastering",1090,40,"";
+areamonster "prontera",1,1,278,356,"Angeling",1096,40,"";
+areamonster "prontera",1,1,278,356,"Angeling",1096,1,"PoringInvasionWin::OnMobKilled1";
+areamonster "prontera",1,1,278,356,"Poring King",1847,1,"PoringInvasionWin::OnMobKilled4";
+areamonster "prontera",1,1,278,356,"Bomb Poring",1904,5,"PoringInvasionWin::OnMobKilled5";
+	end;
+}
+
+-	script	PoringInvasionWin	-1,{
+
+OnMobKilled1:
+if ($@EventPorON == 1) {
+announce "[ Rune-Midgard Guard ]: Poring Coin won by "+ strcharinfo(0) + ".",bc_all | bc_blue;
+set $@RoundCountPor,$@RoundCountPor+1;
+getitem 7539,1;
+goto checkingend;
+}
+end;
+
+OnMobKilled2:
+if ($@EventPorON == 1) {
+announce "[ Rune-Midgard Guard ]: Gold Coin won by "+ strcharinfo(0) + ".",bc_all | bc_blue;
+set $@RoundCountPor,$@RoundCountPor+1;
+getitem 671,1;
+goto checkingend;
+}
+end;
+
+OnMobKilled3:
+if ($@EventPorON == 1) {
+announce "[ Rune-Midgard Guard ]: Silver Coin won by "+ strcharinfo(0) + ".",bc_all | bc_blue;
+set $@RoundCountPor,$@RoundCountPor+1;
+getitem 675,1;
+goto checkingend;
+}
+end;
+
+OnMobKilled4:
+if ($@EventPorON == 1) {
+announce "[ Rune-Midgard Guard ]: Pori Pori Killer Rewards won by "+ strcharinfo(0) + ".",bc_all | bc_blue;
+set $@RoundCountPor,$@RoundCountPor+1;
+getitem 19587,1;
+getitem 7539,5;
+getitem 675,3;
+getitem 671,2;
+getitem 674,1;
+goto checkingend;
+}
+end;
+
+OnMobKilled5:
+if ($@EventPorON == 1) {
+announce "[ Rune-Midgard Guard ]: Bomb Poring won by "+ strcharinfo(0) + ".",bc_all | bc_blue;
+set $@RoundCountPor,$@RoundCountPor+1;
+getitem 677,1;
+getitem 674,1;
+goto checkingend;
+}
+end;
+
+checkingend:
+if ($@RoundCountPor>=23) {
+	set .isStart, 0;
+	set $@RoundCountPor,0;
+	killmonster "prontera","All";
+	announce "[ Rune-Midgard Guard ]: Poring forces have been able to overcome. Poring Invasion Event Done!",0;
+	stopnpctimer;
+	removemapflag "prontera",mf_nomobloot;
+	set $@RoundCountPor,0;
+	set $@EventPorON,0;
+	end;
+	}
+	end;
+}

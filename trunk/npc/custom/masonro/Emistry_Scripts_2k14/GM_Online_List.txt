@@ -1,5 +1,5 @@
 
-prontera,164,166,3	script	GM Online Lists	436,{
+prontera,142,180,8	script	GM Online Lists	436,{
 mes "Staffs Online Lists : ^FF0000"+getarraysize( .GM_Name$ )+"^000000 Staffs";
 mes "^0000FF_____________________________^000000";
 for( set .@i,0; .@i < getarraysize( .GM_Name$ ) ; set .@i,.@i + 1 ){

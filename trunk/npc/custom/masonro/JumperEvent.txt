@@ -1,0 +1,321 @@
+//==========================================================//
+//========= Script by RyCHIRO                      =========//
+//========= http://reincarnation-network.com       =========//
+//========= http://chiyan-ro.com                   =========//
+//==========================================================//
+
+eden_in01,313,51,4	script	Jump Event Starter	824,{
+
+	L_JumpAdmin:
+
+	if (getgmlevel()>=99) {
+	mes "[Manager]";
+	mes "^FF0000~Hi GM " + strcharinfo(0) + "!~^000000";
+	mes "^FF0000The Current Prize is:^000000";
+	mes "^FF00001. Random Prize:^000000 ^008000"+$jmp_item_amount1+" "+getitemname($jmp_item_id1)+"^000000";
+	mes "^FF00002. Random Prize:^000000 ^008000"+$jmp_item_amount2+" "+getitemname($jmp_item_id2)+"^000000";
+	mes "^FF00003. Random Prize:^000000 ^008000"+$jmp_item_amount3+" "+getitemname($jmp_item_id3)+"^000000";
+	
+	next;
+	mes "[Manager]";
+	mes "^FF0000~What should the prize for winning be? Please input the ID.~^000000";
+		menu "Set Prize 1",SP1,"Set Prize 2",SP2,"Set Prize 3",SP3,"Continue Event",StepTwo;
+
+		SP1:
+		next;
+		mes "[Manager]";
+		mes "^FF0000~What should the prize for winning be? Please input the ID.~^000000";
+		input $jmp_item_id1;
+		next;
+		mes "[Manager]";
+		mes "^FF0000~How many if this item should I give away?~^000000";
+		input $jmp_item_amount1;
+		next;
+		mes "[Manager]";
+		mes "^FF0000~So, the prize is^000000 ^008000"+ $jmp_item_amount1 +" "+ getitemname($jmp_item_id1)   +"^000000? ^FF0000Great.~^000000";
+		next;
+		goto L_JumpAdmin;
+
+		SP2:
+		next;
+		mes "[Manager]";
+		mes "^FF0000~What should the prize for winning be? Please input the ID.~^000000";
+		input $jmp_item_id2;
+		next;
+		mes "[Manager]";
+		mes "^FF0000~How many if this item should I give away?~^000000";
+		input $jmp_item_amount2;
+		next;
+		mes "[Manager]";
+		mes "^FF0000~So, the prize is^000000 ^008000"+ $jmp_item_amount2 +" "+ getitemname($jmp_item_id2)   +"^000000? ^FF0000Great.~^000000";
+		next;
+		goto L_JumpAdmin;
+
+		SP3:
+		next;
+		mes "[Manager]";
+		mes "^FF0000~What should the prize for winning be? Please input the ID.~^000000";
+		input $jmp_item_id3;
+		next;
+		mes "[Manager]";
+		mes "^FF0000~How many if this item should I give away?~^000000";
+		input $jmp_item_amount3;
+		next;
+		mes "[Manager]";
+		mes "^FF0000~So, the prize is^000000 ^008000"+ $jmp_item_amount3 +" "+ getitemname($jmp_item_id3)   +"^000000? ^FF0000Great.~^000000";
+		next;
+		goto L_JumpAdmin;
+	
+StepTwo:
+	next;
+	if (.JumpStart == 1 && getgmlevel() >= 5) {
+		mes "[^FF9900Jump Event Starter^000000]";
+		mes "Wanna ^0000FFStop^000000 the Event GM " + strcharinfo(0) + "?";
+		if(select("No:Yes")==1) close;
+		close2;
+		set .JumpStart,0;
+		set $@JmpRnd, 0;
+		goto OnStop;
+	}
+	else if (.JumpStart == 0 && getgmlevel() >= 5) {
+		mes "[^FF9900Jump Event Starter^000000]";
+		mes "Wanna ^0000FFStart^000000 the Event GM " + strcharinfo(0) + "?";
+		if(select("No:Yes")==1) close;
+		close2;
+		set $sponsor$, strcharinfo(0);
+		set .JumpStart,1;
+		goto L_StartJmp;
+	}
+}
+else if(getgmlevel() <= 4) {
+	mes "[^FF9900Jump Event Starter^000000]";
+	mes "To start or stop the event, I will be charging you Ten ^0000FF \"100 Point Coin\"^000000 worth.";
+	next;
+	mes "[^FF9900Jump Event Starter^000000]";
+	mes "What would you like to do " +strcharinfo(0) +"?";
+	next;
+	switch(select("Start Event:Stop Event")) {	
+	case 1:		
+		if( .JumpStart == 1 ) {
+			mes "Event is still going on. ^0000FFStop^000000 the event instead of starting.";
+			close2;
+			dispbottom "No \"100 Point Coin\" has been deducted.";
+			end;
+		}
+		getinventorylist;
+		for(set .@i,0; .@i < @inventorylist_count; set .@i,.@i+1){
+			if(@inventorylist_id[.@i] == 26000){ 
+				set .@getCoin, @inventorylist_amount[.@i];
+			}
+		}
+		if (.@getCoin >= 10) {
+			delitem 26000,10;
+			mes "[^FF9900Jump Event Starter^000000]";
+			mes "Thank you for the sponsorship. You will be recieving a 1,000 a free cash points and a 5 Poring coin.";
+			next;
+			mes "[^FF9900Jump Event Starter^000000]";
+			mes "The event will start now.";
+			close2;
+			set #KAFRAPOINTS, #KAFRAPOINTS + 1000;
+			getitem 7539,3; 
+			dispbottom "Ten \"100 Point Coin\" has been deducted.";
+			dispbottom "Total free cash points " + #KAFRAPOINTS;
+			set $sponsor$, strcharinfo(0);
+			set .JumpStart,1;
+			goto L_StartJmp;
+		}
+		else {
+		mes "[^FF9900Jump Event Starter^000000]";
+		mes "You dont have enough ^0000FF\"100 Point Coin\"^000000 to start the event.";
+		close;
+		}
+	case 2:
+		if( .JumpStart == 0 ) {
+			mes "The Event is not running. ^0000FFStart^000000 the event instead of stopping.";
+			close2;
+			dispbottom "No \"100 Point Coin\" has been deducted.";
+			end;
+		}
+		getinventorylist;
+		for(set .@i,0; .@i < @inventorylist_count; set .@i,.@i+1){
+			if(@inventorylist_id[.@i] == 26000){ 
+				set .@getCoin, @inventorylist_amount[.@i];
+			}
+		}
+		if (.@getCoin >= 10) {
+			delitem 26000,10;
+			mes "[^FF9900Jump Event Starter^000000]";
+			mes "Thank you for the sponsorship. You will be recieving a 1,000 a free cash points and a 5 Poring coin.";
+			next;
+			mes "[^FF9900Jump Event Starter^000000]";
+			mes "The event will stop now.";
+			close2;
+			set #KAFRAPOINTS, #KAFRAPOINTS + 1000;
+			getitem 7539,3; 
+			dispbottom "Ten \"100 Point Coin\" has been deducted.";
+			dispbottom "Total free cash points " + #KAFRAPOINTS;
+			set $sponsor$, strcharinfo(0);
+			set .JumpStart,0;
+			set $@JmpRnd, 0;
+			goto OnStop;
+		}
+		else {
+		mes "[^FF9900Jump Event Starter^000000]";
+		mes "You dont have enough ^0000FF\"100 Point Coin\"^000000 to start the event.";
+		close;
+		}
+	}
+	end;
+}
+OnThu0900:
+OnThu1900:
+	L_StartJmp:
+	announce "[ Jump Event ]: will begin in 35 seconds",bc_all;
+	sleep2 5000;
+	if( .JumpStart == 0 ) end;
+	announce "[ Jump Event ]: Im Going to JUMP somewhere.",bc_all;
+	sleep2 5000;
+	if( .JumpStart == 0 ) end;
+	announce "[ Jump Event ]: By the way I'm going to disguise myself into a random form.",bc_all;
+	sleep2 10000;
+	if( .JumpStart == 0 ) end;
+	announce "[ Jump Event ]: Last 10 seconds",bc_all;
+	sleep2 10000;
+	if( .JumpStart == 0 ) end;
+	set $@ran, rand(1,10);
+	if ($@ran == 10) set $@jmpmap$,"hugel";
+	if ($@ran == 9) set $@jmpmap$,"yuno";
+	if ($@ran == 8) set $@jmpmap$,"comodo";
+	if ($@ran == 7) set $@jmpmap$,"xmas";
+	if ($@ran == 6) set $@jmpmap$,"aldebaran";
+	if ($@ran == 5) set $@jmpmap$,"izlude";
+	if ($@ran == 4) set $@jmpmap$,"payon";
+	if ($@ran == 3) set $@jmpmap$,"geffen";
+	if ($@ran == 2) set $@jmpmap$,"morocc";
+	if ($@ran == 1) set $@jmpmap$,"prontera";
+	announce "[ Jump Event ]: Go Find me! I'm here in "+$@jmpmap$+"!",bc_all;
+	sleep2 5000;
+	if( .JumpStart == 0 ) end;
+	if ($sponsor$ != "") {
+	announce "Event is sponsored by: " + $sponsor$ ,bc_all;
+	}
+	set $sponsor$, "";
+	set $@JmpRnd,10;
+	goto OnStop;
+	
+	OnStop:
+	if ($@JmpRnd == 0){
+	stopnpctimer;
+	sleep2 3000;
+	announce "[ Jump Event ]: Is now OVER! Thanks for participating!",bc_all;
+	sleep2 15000;
+	movenpc "Jumper"+$@ran+"",1,1; //move the NPC
+	setnpcdisplay "Jumper"+$@ran+"",1002;
+	end;
+	}
+	if ($@JmpRnd == 10){
+	goto OnStop2;
+	}
+	stopnpctimer;
+	sleep2 3000;
+	if( .JumpStart == 0 ) end;
+	announce "[ Jump Event ]: Next Round will begin in 15 seconds...",bc_all;
+	sleep2 15000;
+	if( .JumpStart == 0 ) end;
+	setnpcdisplay "Jumper"+$@ran+"",1002;
+	movenpc "Jumper"+$@ran+"",1,1; //move the NPC
+	set $@ran, rand(1,10);
+	if ($@ran == 10) set $@jmpmap$,"hugel";
+	if ($@ran == 9) set $@jmpmap$,"yuno";
+	if ($@ran == 8) set $@jmpmap$,"comodo";
+	if ($@ran == 7) set $@jmpmap$,"xmas";
+	if ($@ran == 6) set $@jmpmap$,"aldebaran";
+	if ($@ran == 5) set $@jmpmap$,"izlude";
+	if ($@ran == 4) set $@jmpmap$,"payon";
+	if ($@ran == 3) set $@jmpmap$,"geffen";
+	if ($@ran == 2) set $@jmpmap$,"morocc";
+	if ($@ran == 1) set $@jmpmap$,"prontera";
+	announce "[ Jump Event ]: Go Find me! I'm here in "+$@jmpmap$+"!!",bc_all;
+	goto OnStop2;
+
+	OnStop2:
+	set $monster, rand(1001,1995);
+	if($monster == 1003 || $monster == 1218 || $monster == 1006 || $monster == 1017 || $monster == 1021 || $monster == 1022 ||    $monster == 1027 || $monster == 1043 || $monster == 1006 || $monster == 1136 || $monster == 1137 || $monster == 1168 ||    $monster == 1171 || $monster == 1172 || $monster == 1173 || $monster == 1181 || $monster == 1210 || $monster == 1223 ||    $monster == 1284 || ($monster >= 1324 && $monster <= 1363) || $monster == 1006 || $monster == 1407 || $monster == 1411 ||    $monster == 1414 || $monster == 1496 || $monster == 1501 || $monster == 1900){ goto OnStop2; end; }
+	while(1) { //Initiate an infinite loop
+	set $@jx,rand(0,300); //Set a randon X coordinate
+	set $@jy,rand(0,300); //Set a random Y coordinate
+	if(checkcell(""+$@jmpmap$+"",$@jx,$@jy,cell_chkpass)) break; //If cell is walkable break out of the loop
+	}
+	initnpctimer;
+	set .JumpStart,1;
+	movenpc "Jumper"+$@ran+"",$@jx,$@jy; //move the NPC
+	setnpcdisplay "Jumper"+$@ran+"",$monster;
+	set $@JmpRnd,$@JmpRnd-1;
+	end;
+
+	OnTimer60000:
+	set .JumpStart,0;
+	announce "[ Jump Event ]: No one finds ME! I'm here at the "+$@jmpmap$+" of "+$@jx+" "+$@jy+"!",bc_all;
+	sleep2 3000;
+	donpcevent "Jump Event Starter::OnStop";
+	end;
+
+}//End Script
+
+-	script	Jumper	-1,{
+	if( .JumpStart == 0 ){
+	mes "[Jumper]";
+	mes "I'm sorry, Someone Found me..";
+	close;
+	}
+	set $@prize, rand(1,100);
+	if ( $@prize <= 50 ){
+	set .JumpStart,0;
+	getitem $jmp_item_id1,$jmp_item_amount1;
+	announce "[ Jump Event ]: "+strcharinfo(0)+" is the WINNER! I'm here at the "+$@jmpmap$+" of "+$@jx+" "+$@jy+"!",bc_all;
+	donpcevent "Jump Event Starter::OnStop";
+	mes "[Jumper]";
+	mes "WOW you found me!";
+	mes "Take this as a REWARD!";
+	mes "You got ^008000"+ $jmp_item_amount1 +" "+ getitemname($jmp_item_id1) +"^000000";
+	close;
+	end;
+	}
+	set $@prize, rand(1,100);
+	if ( $@prize <= 49 ){
+	set .JumpStart,0;
+	getitem $jmp_item_id2,$jmp_item_amount2;
+	announce "[ Jump Event ]: "+strcharinfo(0)+" is the WINNER! I'm here in "+$@jmpmap$+" "+$@jx+" "+$@jy+"!",bc_all;
+	donpcevent "Jump Event Starter::OnStop";
+	mes "[Jumper]";
+	mes "WOW you found me!";
+	mes "Take this as a REWARD!";
+	mes "You got ^008000"+ $jmp_item_amount2 +" "+ getitemname($jmp_item_id2) +"^000000";
+	close;
+	end;
+	}
+	set $@prize, rand(1,100);
+	if ( $@prize <= 48 ){
+	set .JumpStart,0;
+	getitem $jmp_item_id3,$jmp_item_amount3;
+	announce "[ Jump Event ]: "+strcharinfo(0)+" is the WINNER! I'm here in "+$@jmpmap$+" "+$@jx+" "+$@jy+"!",bc_all;
+	donpcevent "Jump Event Starter::OnStop";
+	mes "[Jumper]";
+	mes "WOW you found me!";
+	mes "Take this as a REWARD!";
+	mes "You got ^008000"+ $jmp_item_amount3 +" "+ getitemname($jmp_item_id3) +"^000000";
+	close;
+	end;
+	}
+}//End Script
+
+prontera,1,1,1	duplicate(Jumper)	Jumper1	1002
+morocc,1,1,1	duplicate(Jumper)	Jumper2	1002
+geffen,1,1,1	duplicate(Jumper)	Jumper3	1002
+payon,1,1,1	duplicate(Jumper)	Jumper4	1002
+izlude,1,1,1	duplicate(Jumper)	Jumper5	1002
+aldebaran,1,1,1	duplicate(Jumper)	Jumper6	1002
+xmas,1,1,1	duplicate(Jumper)	Jumper7	1002
+comodo,1,1,1	duplicate(Jumper)	Jumper8	1002
+yuno,1,1,1	duplicate(Jumper)	Jumper9	1002
+hugel,1,1,1	duplicate(Jumper)	Jumper10	1002

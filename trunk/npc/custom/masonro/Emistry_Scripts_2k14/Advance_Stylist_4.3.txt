@@ -166,7 +166,7 @@ OnInit:
 
 
 // NPC Lists
-prontera,164,167,3	script	Adv. Stylist#main	878,{
+prontera,158,193,3	script	Adv. Stylist#main	878,{
 	doevent "Stylist::OnTalk";
 }
 

@@ -100,7 +100,7 @@ quiz_02,347,78,3	shop	All Weapon 3rd Class	588,1191:2000000,1196:5000000,1433:50
 
 //The Warper to Mall
 
-prontera.gat,156,191,4	script	Mall Warper	902,{
+prontera.gat,160,190,4	script	Mall Warper	902,{
 	shop:	warp "quiz_02.gat" ,337,74;
 }	
 

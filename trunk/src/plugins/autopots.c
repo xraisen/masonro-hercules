@@ -8,10 +8,11 @@
 #include "../map/unit.h"
 #include "../map/atcommand.h"
 #include "../map/itemdb.h"
+#include "../common/HPMDataCheck.h"
 
 #define OPTION_AUTOPOTS 0x40000000
 
-#include "../common/HPMDataCheck.h"
+
 /*
 3.1 Plugins Release [Mhalicot]
 3.2 Update to Latest Revision [Mhalicot]

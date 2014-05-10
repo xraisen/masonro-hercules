@@ -174,3 +174,4 @@ void HPM_HP_load(void) {
 	
 	#include "../plugins/HPMHooking/HPMHooking.sources.inc"
 }
+

@@ -7969,6 +7969,9 @@ BUILDIN(delequip)
 	if(i >= 0) {
 		pc->unequipitem(sd,i,3); //recalculate bonus
 		pc->delitem(sd,i,1,0,2,LOG_TYPE_SCRIPT);
+		script_pushint(st,1);
+	} else {
+		script_pushint(st,0);
 	}
 
 	return true;
@@ -8268,20 +8271,36 @@ BUILDIN(addtoskill) {
 /// guildskill <skill id>,<amount>;
 /// guildskill "<skill name>",<amount>;
 BUILDIN(guildskill) {
-	int id;
+	int skill_id, id, max_points;
 	int level;
+
 	TBL_PC* sd;
-	int i;
+	struct guild *gd;
+	struct guild_skill gd_skill;
 
 	sd = script->rid2sd(st);
 	if( sd == NULL )
-		return true;// no player attached, report source
+		return false; // no player attached, report source
 
-	id = ( script_isstringtype(st,2) ? skill->name2id(script_getstr(st,2)) : script_getnum(st,2) );
+	if( (gd = sd->guild) == NULL )
+		return true;
+
+	skill_id = ( script_isstringtype(st,2) ? skill->name2id(script_getstr(st,2)) : script_getnum(st,2) );
 	level = script_getnum(st,3);
-	for( i=0; i < level; i++ )
-		guild->skillup(sd, id);
 
+	id = skill_id - GD_SKILLBASE;
+	max_points = guild->skill_get_max(skill_id);
+
+	if( (gd->skill[id].lv + level) > max_points )
+		level = max_points - gd->skill[id].lv;
+
+	if( level == 0 )
+		return true;
+
+	memcpy(&gd_skill, &(gd->skill[id]), sizeof(gd->skill[id]));
+	gd_skill.lv += level;
+
+	intif->guild_change_basicinfo( gd->guild_id, GBI_SKILLLV, &(gd_skill), sizeof(gd_skill) );
 	return true;
 }
 
@@ -18537,6 +18556,13 @@ BUILDIN(tradertype) {
 		}
 		npc->market_delfromsql(nd,USHRT_MAX);
 	}
+
+#if PACKETVER < 20131223
+	if( type == NST_MARKET ) {
+		ShowWarning("buildin_tradertype: NST_MARKET is only available with PACKETVER 20131223 or newer!\n");
+		script->reportsrc(st);
+	}
+#endif
 
 	nd->u.scr.shop->type = type;
 

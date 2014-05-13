@@ -1959,17 +1959,33 @@
 
 // masonro
 
+2199,479,100 //Angra Manyu
+1599,479,100 //Ahura Mazda
+23000,479,100 //Race Of The Day reward
+23001,479,100 //Angra Manyu Rental Box
+23002,479,100 //Ahura Mazda Rental Box
+23003,479,100 //Angra Manyu and Ahura Mazda Limited
+23004,479,100 //Costume Package #1
+23005,479,100 //Costume Package #2
+23006,479,100 //Costume Package #3
+23007,479,100 //Premium Point Coin
+23008,479,100 //Starters Pack
+
+23100,479,100 //Ancient Expert Refinery Scroll
+23101,479,100 //Ancient Master Refinery Scroll
+23102,479,100 //Ancient Basic Refinery Scroll
+
 //Headgear-Hi
-24000,471,100 //Alucard Hat Special
-24001,471,100 //Angel Evil Helm Special
-24002,471,100 //Black Pirate Hat Special
+24000,479,100 //Alucard Hat Special
+24001,479,100 //Angel Evil Helm Special
+24002,479,100 //Black Pirate Hat Special
 
 //Headgear-Mid
-24092,471,100 //Angeling Wings Special
-24093,471,100 //Angel Wings Special
-24094,471,100 //Arcane Intity Wings Special
+24092,479,100 //Angeling Wings Special
+24093,479,100 //Angel Wings Special
+24094,479,100 //Arcane Intity Wings Special
 
 //Headgear-Low
-24184,471,100 //Black Chakra Special
-24185,471,100 //Black Dragon Special
-24186,471,100 //Blue Dragon Special
+24184,479,100 //Black Chakra Special
+24185,479,100 //Black Dragon Special
+24186,479,100 //Blue Dragon Special

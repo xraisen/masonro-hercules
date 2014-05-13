@@ -20,7 +20,7 @@ switch( select( ( getmapusers( .Map$ ) )?"^FF0000NOT Available":"^0000FFAvailabl
 				"Top ^FF0000"+.TopRank+"^000000 Breaker Ladder",
 				( getgmlevel() < 90 )?"":"^FF0000[GM]^000000 Reset Room",
 				( getgmlevel() < 90 )?"":"^FF0000[GM]^000000 Reset Ladder" )){
-Case 1:
+case 1:
 	if( getmapusers( .Map$ ) ){
 		mes "There is another player inside it now.";
 		next;
@@ -42,7 +42,7 @@ Case 1:
 		close;
 		end;
 	}
-Case 2:
+case 2:
 	mes "^ED1ADCLatest Record^000000 : "+LatestRecord/1000+"."+LatestRecord%1000+" Seconds.";
 	for( set .@i,0; .@i < .TopRank; set .@i,.@i + 1 ){
 		if( !$TopRankTime[.@i] ) break;
@@ -52,7 +52,7 @@ Case 2:
 	next;
 	break;
 
-Case 3:
+case 3:
 	mapannounce .Map$,"A GM has RESET the Breaker Test Room.",0,0x00FF00;
 	killmonster .Map$,"All";
 	sleep2 3000;
@@ -60,14 +60,14 @@ Case 3:
 	mes "Done Reset. and Player who are inside are warped out.";
 	next;
 	break;
-Case 4:	
+case 4:	
 	switch( select( "^0000FFAll Player^000000:^FF0000One Player^000000" ) ){
-		Case 1:
+		case 1:
 			deletearray $TopRankTime[0],getarraysize( $TopRankTime );
 			deletearray $TopName$[0],getarraysize( $TopName$ );
 			mes "RESETED WHOLE LADDER.";
 			break;
-		Case 2:
+		case 2:
 			mes "Please input the ^FF0000EXACT NAME^000000 of player you want to delete.";
 			input .Name$;
 			for( set .@i,0; .@i < .TopRank; set .@i,.@i + 1 ){

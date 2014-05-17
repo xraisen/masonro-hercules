@@ -94,7 +94,7 @@ for( set .@i,5; .@i > 0; set .@i,.@i - 1 ){
 	sleep2 1000;
 	}
 mapannounce .Map$,"Hit the Emperium Now and Skills Disabled.",0,0x00FF00;
-setmapflag .Map$,mf_noskill;
+//setmapflag .Map$,mf_noskill;
 monster .Map$,29,27,"Breaker Test",1288,1,strnpcinfo(0)+"::OnBreaked";
 set .Record,0;
 sleep2 500;

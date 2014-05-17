@@ -1,6 +1,6 @@
 
 
-prontera,138,184,3	script	ROTD	436,{
+prontera,138,184,6	script	ROTD	436,{
 set .@gmlevel,getgmlevel();
 
 do{

@@ -116,9 +116,26 @@ do{
 			default: break;				
 		}
 	}else{
+		mes "[Doppelganger]";
+		mes "Make sure you haved save your current class before creating a new class.";
+		mes " ";
+		mes "Are you sure?";
+		next;
+		switch(select("Yes:No"))	{
+		case 1:
 		message strcharinfo(0),"NEW CLASSES";
 		jobchange 0;
 		resetlvl 1;
+		mes "[Doppelganger]";
+		mes "It is done. Thank you!";
+		break;
+		
+		case 2:		
+		mes "[Doppelganger]";
+		mes "Please come back again. Thank you!";
+		message strcharinfo(0),"Nothing happened.";
+		break;
+		}
 	}
 }while( .@Slot < .MaxSlot );
 close;

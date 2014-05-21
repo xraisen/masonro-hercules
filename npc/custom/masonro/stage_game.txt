@@ -1,0 +1,511 @@
+eden_in01,153,208,6	script	Stage Game	413,{
+
+while(1){
+mes "Hello, I am ^FF0000Stage Game Manager^000000. How can I help you ?";
+mes "Registration Status : "+( getmapusers(.Map$) > 0 ?"^FF0000OFF":"^0000FFON")+"^000000";
+mes "(^FF0000Only Leader can Register^000000)";
+//mes "Current Ladder Points: "+#MVP_LADDER_PTS;
+mes "";
+next;
+switch(select("Stage Game Information",
+			( getmapusers(.Map$) > 0 || getcharid(0) != getpartyleader( getcharid(1),2 ) )?"":"Register for  Stage Game",
+			( getmapusers(.Map$) < 1 || getgmlevel() < 60 )?"":"^FF0000Reset Stage Game^000000")) {
+			
+	case 1:
+		mes "[^FF0000Game Manager^000000]";
+		mes "^FF0000Stage Game^000000 is a small game that have alot of monster to be kill from round to round.";
+		mes "With every increase or round you manage to reach, the monster could be stronger than before.";
+		next;
+		mes "[^FF0000Game Manager^000000]";
+		mes "You could win up some ^0000FFUnique^000000 prize upon you finished the whole ^FF0000Stage Game^000000";
+		next;
+		mes "[^FF0000Game Manager^000000]";
+		mes "In order to ^0000FFRegister^000000 for ^FF0000Stage Game^000000, all your party member must meet the ^0000FFRequirements^000000";
+		next;
+		mes "[^FF0000Game Manager^000000]";
+		mes "[  ^00FF00Requirements^000000  ]";
+		mes "^0000FFBase Level^000000 : "+.Level+" Level";
+		//mes "^0000FFLadder Points^000000 : "+.Zeny+" points ";
+		mes "^0000FFParty Members^000000 : "+.PartyMember+" Members";
+		//mes "(^FF0000Level / Ladder points only applied on Leader ^000000 )";
+		next;
+		break;
+	case 2:
+	//	if( getgmlevel() < 80 ){
+	//	mes "Stage Game is under Debugging Development. Simple Game but Hard ";
+	//	close;
+	//	}
+		getpartymember(getcharid(1)),1;
+		getpartymember(getcharid(1)),2;
+		set @Count,0;
+		for ( set @i, 0; @i < $@partymembercount; set @i, @i +1 ){
+			if ( isloggedin($@partymemberaid[@i]) ){
+				set @Count,@Count+1;
+				}
+			}
+		if( @Count < .PartyMember || BaseLevel < .Level ){
+		//if( @Count < .PartyMember || BaseLevel < .Level || #MVP_LADDER_PTS < .Zeny ){
+		mes "[  ^00FF00Requirements^000000  ]";
+		mes "^0000FFBase Level^000000 : "+.Level+" Level";
+		//mes "^0000FFLadder Points^000000 : "+.Zeny+" Zeny ";
+		mes "^0000FFParty Members^000000 : "+.PartyMember+" Members";
+		//mes "(^FF0000Level / Ladder Points only Applied on Leader ^000000 )";
+		close;
+		}else{
+		
+		set .@party_id,getcharid(1);
+		getpartymember(.@party_id,0);
+		set .@partymembercount,$@partymembercount; 
+		copyarray .@partymembername$[0],$@partymembername$[0],.@partymembercount;		
+		getpartymember(.@party_id,2);
+		copyarray .@partymemberaid[0],$@partymemberaid[0] ,.@partymembercount;
+		set @ins_mas,getpartyleader(.@party_id,2);
+		
+		for ( set @i, 0; @i < .@partymembercount; set @i, @i +1 ){
+				//if (has_instance("1@stage") != "") {
+					instance_destroy;
+			//}
+		}
+		
+		if ( getcharid(0) != @ins_mas ) {
+			mes "Party members need to listen to the party leader or everything falls apart. ^ff0000Only party leaders can set up challenge^000000. Tell your leader to come talk to me.";
+			close;
+		}
+
+
+			
+		set .@instance, instance_create("Stage Game Battle", .@party_id);
+		
+		instance_attachmap(.Map$, .@instance);
+		instance_attach(.@instance);
+		instance_set_timeout 1800,2,.@instance;
+		instance_init(.@instance);
+
+		setarray .@stagegame[0],
+							1847,1,			// Pori Pori
+							1874,3,			// Beelzebub
+							1779,3,			// Ktullanux   			
+							1751,3,			// Valkyrie Randgris
+							2165,3,			// Queen Scaraba   
+							1832,2,			// Ifrit
+							1917,2;			// Wounded Morroc	
+		
+		set 'instid, .@instance;
+		set .@LevelMob,0;
+		set 'LevelMob, .@LevelMob;
+		set 'partycount, .@partymembercount;
+		set 'ins_mas,@ins_mas;
+		copyarray 'partymemberaid[0],.@partymemberaid[0] ,.@partymembercount;
+		copyarray 'stagegame[0],.@stagegame[0],getarraysize(.@stagegame);
+		copyarray 'partymembername$[0],.@partymembername$[0],.@partymembercount;
+		
+		donpcevent instance_npcname("Stage Game#inside", instance_id()) + "::OnInstanceInit";
+		donpcevent instance_npcname("#Boarder", instance_id()) + "::OnInstanceInit";
+		donpcevent instance_npcname("#Reward NPC", instance_id()) + "::OnInstanceInit";		
+		donpcevent instance_npcname("Healer Angeling#Stage", instance_id()) + "::OnInstanceInit";		
+		
+		
+		//set #MVP_LADDER_PTS, #MVP_LADDER_PTS - .Zeny;
+		mes "Your party will now be warped into the Destination to start the Game.";
+		dispbottom "Click on the NPC inside to start the game.";
+		//delwaitingroom "Stage Game#inside";
+		announce "Team [ "+getpartyname( getcharid(1) )+"] has joined the Stage Game.",0;
+		warpparty .Map$,56,64,getcharid(1);
+		killmonster .Map$,"All";
+		set getvariableofnpc(.Level,"Stage Game#inside"),0;
+		end;
+		}
+	case 3:
+		mes "The Game has been Reset.";
+		killmonster .Map$,"All";
+		instance_warpall "prontera",155,180;
+		announce "A GM has RESET the Stage Game, Sorry for the Incovenience.",0;
+		set getvariableofnpc(.Level,"Stage Game#inside"),0;
+		delwaitingroom "Stage Game#inside";
+		next;
+		break;
+	}
+}
+close;
+
+OnInit:
+OnWhisperGlobal:
+set .Level,99;
+set .Zeny,0;
+set .PartyMember,1;
+set .Map$,"1@stage";
+
+//waitingroom "   Stage Game",0;
+}
+
+1@stage,50,50,5	script	Stage Game#inside	437,{
+
+OnStart:
+if( mobcount( strcharinfo(3), "all" ) > 0 || 'LevelMob > 0)
+{
+dispbottom "Just Kill All the Monster to Win the Game.";
+end;
+}
+
+//setarray 'stagegame, .@stagegame['LevelMob];
+
+instance_announce(instance_id(),"[Level "+( ('LevelMob/2)+1 )+"] : [ "+'stagegame['LevelMob+1]+" x "+getmonsterinfo( 'stagegame['LevelMob],0)+" ]",bc_npc|bc_yellow);
+monster "1@stage",0,0,"[Slave] "+ getmonsterinfo( 'stagegame['LevelMob],0),'stagegame['LevelMob],'stagegame['LevelMob+1],instance_npcname("Stage Game#inside", instance_id())+"::OnMobKill" ;
+delwaitingroom;
+waitingroom "Left ["+mobcount( "1@stage",instance_npcname("Stage Game#inside", instance_id())+"::OnMobKill" )+"] Monster",0;
+end;
+
+OnMobKill:
+delwaitingroom;
+if( mobcount( "1@stage",instance_npcname("Stage Game#inside", instance_id())+"::OnMobKill" ) == 0 && 'LevelMob < ( getarraysize( 'stagegame ) - 5 ) ){
+	set 'LevelMob,'LevelMob + 2;
+	waitingroom "["+((( getarraysize( 'stagegame )/2 ) - 'LevelMob/2) - 1)+"] Rounds to Go.",0;
+	for( set .@t,5; .@t > 0; set .@t,.@t - 1 ){
+		instance_announce(instance_id(),"[Level "+( ('LevelMob/2)+1 )+"] in "+.@t+" Seconds",bc_npc|bc_yellow);
+		sleep2 1000;
+		}
+instance_announce(instance_id(),"[Level "+( ('LevelMob/2)+1 )+"] : [ "+'stagegame['LevelMob+1]+" x "+getmonsterinfo( 'stagegame['LevelMob],0)+" ]",bc_npc|bc_yellow);
+monster "1@stage",0,0,"[Slave] "+getmonsterinfo( 'stagegame['LevelMob],0),'stagegame['LevelMob],'stagegame['LevelMob+1],instance_npcname("Stage Game#inside", instance_id())+"::OnMobKill";
+}else if( mobcount( "1@stage",instance_npcname("Stage Game#inside", instance_id())+"::OnMobKill" ) == 0 && 'LevelMob >= ( getarraysize( 'stagegame ) - 5 ) ){
+	set 'LevelMob,'LevelMob + 2;
+	instance_announce(instance_id(),"BOSS Stage",bc_npc|bc_red);	
+	sleep2 2000;
+	instance_announce(instance_id(),"Prepare for the final battle",bc_npc|bc_red);
+	sleep2 2000;
+	for( set .@t,10; .@t > 0; set .@t,.@t - 1 ){
+		if (.@t <= 5)	{specialeffect 563;}
+		instance_announce(instance_id(),"BOSS STAGE in "+.@t+" Seconds",bc_npc|bc_red);
+		sleep2 1000;
+		}
+instance_announce(instance_id(),"[Level "+( ('LevelMob/2)+1 )+"] : [ "+'stagegame['LevelMob+1]+" x "+getmonsterinfo( 'stagegame['LevelMob],0)+" ]",bc_npc|bc_yellow);
+monster "1@stage",0,0,"[BOSS] "+getmonsterinfo( 'stagegame['LevelMob],0),'stagegame['LevelMob],'stagegame['LevelMob+1],instance_npcname("Stage Game#inside", instance_id())+"::OnBossKill";
+}
+delwaitingroom;
+waitingroom "Left ["+mobcount( "1@stage",instance_npcname("Stage Game#inside", instance_id())+"::On"+( ( 'LevelMob-2 ) > ( getarraysize( 'stagegame ) - 5 ) ?  "BossKill":"MobKill") )+"] Monster",0;
+end;
+
+OnBossKill:
+delwaitingroom;
+if( mobcount( "1@stage",instance_npcname("Stage Game#inside", instance_id())+"::OnBossKill" ) > 0 ){
+waitingroom "Left ["+mobcount( "1@stage",instance_npcname("Stage Game#inside", instance_id())+"::OnBossKill")+"] Monster",0;
+end;
+}else{
+instance_announce(instance_id(),"Congratulation to Team [ "+getpartyname( getcharid(1) )+" ] who had just finished the Stage Game. ",bc_npc|bc_yellow);
+
+//**see this
+// *******Fixed super bug issue**********
+for ( set .@i, 0; .@i < 'partycount; set .@i, .@i +1 ){
+	if ( isloggedin('partymemberaid[.@i]) ){
+		if (has_instance("1@stage") != "") {
+			getmapxy(.tmpMap$,.tmpx,.tmpy,0,'partymembername$[.@i]);
+			if (.tmpMap$ == strcharinfo(3)) {
+		// see this... only invoked time to those whos in the current event map only
+			attachrid 'partyaid[.@i];
+			// attach timer to the npc Boarder
+			unittalk getcharid(3,'partymembername$[.@i]),'expresso$[rand(0,(getarraysize('expresso$) - 1))];
+			unitemote getcharid(3,'partymembername$[.@i]),e_heh;				
+			specialeffect2 709,AREA,'partymembername$[.@i];
+			}
+		}
+	}
+}
+// *******end**********
+
+//**see this
+//******added exclusively for the announcement upon completion the current run
+	
+	disablenpc instance_npcname("Stage Game#inside", instance_id());
+	enablenpc instance_npcname("#Reward NPC", instance_id());
+	delwaitingroom;	
+	instance_announce(instance_id(),"Reward NPC: Come to me to get the rewards.",bc_npc|bc_yellow);
+	sleep2 5000;
+	instance_announce(instance_id(),"Reward NPC: You have only 3 mins to get the rewards.", bc_npc|bc_yellow);
+	//activate the timer
+	donpcevent instance_npcname("#Boarder", instance_id()) + "::OnDoneQuest";
+	end;
+	}
+//*******END
+
+OnInstanceInit:
+enablenpc instance_npcname("Stage Game#inside", instance_id());
+waitingroom "    Click Me",0;
+end;
+}
+
+1@stage,49,92,4	script	#Reward NPC	70,{
+
+	// check if initialization succeeded. this is to avoid displaying the null value to the member nor to the party  leader
+	if ($@checkActive$ != "Active") 
+	// if succeed proceed below
+	if(!getcharid(1)) end;
+	if(!isloggedin(getpartyleader(getcharid(1),1))) end;
+	
+	MainMenu:
+	
+	for( set .@i,0; .@i < $@howManyItems; set .@i,.@i+1 )
+	{		
+		if('giveItemID[.@i] != 0) {
+		setarray .statItem$[.@i], (.@i + 1) + ". " + getitemname('itemNumbers[.@i]) + " -  ^0000FF[Available]^000000";
+		} else {
+		setarray .statItem$[.@i], (.@i + 1) + ". " + getitemname('itemNumbers[.@i]) + " - ^990099" +  .playerItemName$[.@i] + "^000000";
+		}
+	}
+
+	if (getcharid(0) != 'ins_mas) {
+		
+		mes "^FF9900Reward NPC^000000"; 
+		mes "^FF0000" + strcharinfo(0) + "^000000, here are the items lists below as follows."; 
+		for( set .@i,0; .@i<$@howManyItems; set .@i,.@i+1 )
+		{
+			mes .statItem$[.@i];
+		}
+		close;
+	}
+
+	// Create menu for item display
+	set @j,0;
+	for( set .@i,0; .@i<$@howManyItems; set .@i,.@i+1 )
+	{
+		setarray .itemListDisplay$[.@i],.statItem$[.@i];
+		set @menulist$[@j],.@itemListDisplay$[.@i];
+		set @menureference[@j],.@i;
+		
+		set @j,@j+1;		
+	}	
+
+	mes "^FF9900Reward NPC^000000";		
+	mes "Please select an ^0000FFitem ^000000 to give.";
+	menu  .itemListDisplay$[0],itemChoice,.itemListDisplay$[1],itemChoice,.itemListDisplay$[2],itemChoice,.itemListDisplay$[3],itemChoice,.itemListDisplay$[4],itemChoice,.itemListDisplay$[5],itemChoice,.itemListDisplay$[6],itemChoice,.itemListDisplay$[7],itemChoice,.itemListDisplay$[8],itemChoice,.itemListDisplay$[9],itemChoice,.itemListDisplay$[10],itemChoice,.itemListDisplay$[11],itemChoice,.itemListDisplay$[12],itemChoice,.itemListDisplay$[13],itemChoice,.itemListDisplay$[14],itemChoice,.itemListDisplay$[15],itemChoice,.itemListDisplay$[16],itemChoice,.itemListDisplay$[17],itemChoice,.itemListDisplay$[18],itemChoice,.itemListDisplay$[19],itemChoice,.itemListDisplay$[20],itemChoice,.itemListDisplay$[21],itemChoice,.itemListDisplay$[22],itemChoice,.itemListDisplay$[23],itemChoice,.itemListDisplay$[24],itemChoice,.itemListDisplay$[25],itemChoice,.itemListDisplay$[26],itemChoice,.itemListDisplay$[27],itemChoice,.itemListDisplay$[28],itemChoice,.itemListDisplay$[29],itemChoice,.itemListDisplay$[30 ],itemChoice,.itemListDisplay$[31],itemChoice,.itemListDisplay$[32],itemChoice,.itemListDisplay$[33],itemChoice,.itemListDisplay$[34],itemChoice,.itemListDisplay$[35],itemChoice,.itemListDisplay$[36],itemChoice,.itemListDisplay$[37],itemChoice,.itemListDisplay$[38],itemChoice,.itemListDisplay$[39],itemChoice,.itemListDisplay$[40],itemChoice,.itemListDisplay$[41],itemChoice,.itemListDisplay$[42],itemChoice,.itemListDisplay$[43],itemChoice,.itemListDisplay$[44],itemChoice,.itemListDisplay$[45],itemChoice,.itemListDisplay$[46],itemChoice,.itemListDisplay$[47],itemChoice,.itemListDisplay$[48],itemChoice,.itemListDisplay$[ 49],itemChoice,.itemListDisplay$[50],itemChoice,.itemListDisplay$[51],itemChoice,.itemListDisplay$[52],itemChoice,.itemListDisplay$[53],itemChoice,.itemListDisplay$[54],itemChoice,.itemListDisplay$[55],itemChoice,.itemListDisplay$[56],itemChoice,.itemListDisplay$[57],itemChoice,.itemListDisplay$[58],itemChoice,.itemListDisplay$[59],itemChoice,.itemListDisplay$[60],itemChoice,.itemListDisplay$[61],itemChoice,.itemListDisplay$[62],itemChoice,.itemListDisplay$[63],itemChoice,.itemListDisplay$[64],itemChoice,.itemListDisplay$[65],itemChoice,.itemListDisplay$[66],itemChoice,.itemListDisplay$[67],itemChoice,.itemListDisplay$[68],itemChoice,.itemListDisplay$[69],itemChoice,.itemListDisplay$[70],itemChoice,.itemListDisplay$[71],itemChoice,.itemListDisplay$[72],itemChoice,.itemListDisplay$[73],itemChoice,.itemListDisplay$[74],itemChoice,.itemListDisplay$[75],itemChoice,.itemListDisplay$[76],itemChoice,.itemListDisplay$[77],itemChoice,.itemListDisplay$[78],itemChoice,.itemListDisplay$[79],itemChoice,.itemListDisplay$[80],itemChoice,.itemListDisplay$[81],itemChoice,.itemListDisplay$[82],itemChoice,.itemListDisplay$[83] ,itemChoice,.itemListDisplay$[84],itemChoice,.itemListDisplay$[85],itemChoice,.itemListDisplay$[86],itemChoice,.itemListDisplay$[87],itemChoice,.itemListDisplay$[88],itemChoice,.itemListDisplay$[89],itemChoice,.itemListDisplay$[90],itemChoice,.itemListDisplay$[91],itemChoice,.itemListDisplay$[92],itemChoice,.itemListDisplay$[93],itemChoice,.itemListDisplay$[94],itemChoice, .itemListDisplay$[95],itemChoice,.itemListDisplay$[96],itemChoice,.itemListDisplay$[97],itemChoice,.itemListDisplay$[98],itemChoice,.itemListDisplay$[99],itemChoice;
+	close;
+	itemChoice:
+		if ('giveItemID[@menu-1] == 0) { 
+		mes "Oops~! That item is ^FF0000Not Available.^000000";
+		goto MainMenu;
+		}
+		mes "You choose an item ^FF0000" + getitemname('giveItemID[@menu-1]) + "^000000";
+		mes "Please select a ^0000FFparty member ^000000 to give.";
+
+		set @getIdToGive,'giveItemID[@menu-1];	
+		set @menuIndex, @menu-1;
+		goto SelectPartyMember;
+		close;		
+	// Create menu for party member display
+	SelectPartyMember:	
+	// get party member names
+
+    set @Count,0;
+	set @CountOnlineMember,0;
+	cleararray .playerName$,"",100;
+   	L_DisplayMember:
+		if(@Count == 'partycount) goto L_DisplayMemberEnd;		
+		if ( isloggedin('partymemberaid[@Count]) ){
+			//***see this
+			if (has_instance("1@stage") != "") {
+			getmapxy(.tmpMap$,.tmpx,.tmpy,0,'partymembername$[@Count]);
+				if (.tmpMap$ == strcharinfo(3)) {
+					setarray .playerName$[@CountOnlineMember], 'partymembername$[@Count];			
+					set @CountOnlineMember,@CountOnlineMember+1;	
+				}
+			}
+		}
+
+		set @Count,@Count+1;
+       	goto L_DisplayMember;
+	L_DisplayMemberEnd:
+	menu .playerName$[0], PlayersCorner,.playerName$[1], PlayersCorner,.playerName$[2], PlayersCorner,.playerName$[3],  PlayersCorner, .playerName$[4], PlayersCorner,.playerName$[5], PlayersCorner,.playerName$[6], PlayersCorner,.playerName$[7],  PlayersCorner,.playerName$[8], PlayersCorner,.playerName$[9], PlayersCorner,.playerName$[10], PlayersCorner,.playerName$[11],  PlayersCorner,.playerName$[12], PlayersCorner,.playerName$[13], PlayersCorner,.playerName$[14],  PlayersCorner,.playerName$[15], PlayersCorner,.playerName$[16], PlayersCorner,.playerName$[17],  PlayersCorner,.playerName$[18], PlayersCorner,.playerName$[19], PlayersCorner;
+	// party member distribution
+	PlayersCorner:	
+	// set character to item
+	set .playerItemName$[@menuIndex], .playerName$[@menu-1];
+	getitem @getIdToGive,1, getcharid(3,.playerName$[@menu-1]);
+	mes "You have given the item ^0000FF" + getitemname(@getIdToGive) + "^000000 to ^990099" + .playerName$[@menu-1] +  "^000000";
+	//Validate if still have an available item left
+	setarray 'giveItemID[@menuIndex],0;
+	for( set .@i,0; .@i<getarraysize('giveItemID); set .@i,.@i+1 )
+	{
+		if ('giveItemID[.@i] > 0) {goto MainMenu;}
+	}	
+	goto endNow;	
+	close;
+
+	endNow:
+	next;
+	mes "^FF9900[Reward NPC]^000000"; 
+
+	// get party member names
+
+       set @Count,0;
+	cleararray .playerName$,"",100;
+   	L_DisplayMember2:
+		if(@Count == 'partycount) goto L_DisplayMemberEnd2;			
+		if ( isloggedin('partymemberaid[@Count]) ){
+			//***see this
+			if (has_instance("1@stage") != "") {
+			getmapxy(.tmpMap$,.tmpx,.tmpy,0,'partymembername$[@Count]);
+				if (.tmpMap$ == strcharinfo(3)) {
+					if((@Count+1) != 'partycount) {
+						set .getPlayerNames$, "^000000and ^FF0000" + 'partymembername$[@Count] + "! ^000000";			
+					}
+					else {
+						set .getPlayerNames$, "Congratulations ^FF0000" + 'partymembername$[@Count] + ", " + .getPlayerNames$;			
+					}
+				}
+			}
+		}
+
+		set @Count,@Count+1;
+       	goto L_DisplayMember2;
+	L_DisplayMemberEnd2:
+	
+	set .@id,getcharid(1);
+	set $@checkActive$, "Not";
+	//stop timer
+	donpcevent instance_npcname("#Boarder", instance_id()) + "::OnStopTimer";
+	mes .getPlayerNames$;
+	next;
+	instance_destroy ('instid);
+	close;
+end;
+	
+OnInstanceInit:
+disablenpc instance_npcname("#Reward NPC", instance_id());	
+end;
+}
+
+1@stage,18,52,0	script	#Boarder	-1,{
+end;
+OnInstanceInit:
+// set players random hurray!
+setarray $@expresso$[0],
+		"Damn! We're so good!",
+		"Thats what we called AWESOME!",
+		"We are owning!",
+		"Could somebody please tell us that we are so AWESOME?!?",
+		"What the hell?!? Is that it?",
+		"Is it done already? We are just having a warm-up here!",
+		"Kill! kill! kill!",
+		"I love this game! MasonRO rules!",
+		"Im having a lot of fun killing you. Shall we kill you again?",
+		"Sweet...",
+		"Oh common?!?",
+		"Ooh yeah!!!",
+		"I love MasonRO!!!",
+		"Oh la~ la~",
+		"This is so damn fun!!!",
+		"Oh yeah! I am awesome!!!",
+		"Oh!?! Is that it?";
+copyarray 'expresso$[0], $@expresso$[0], getarraysize($@expresso$);	
+//**********************SET-UP*********************//
+//***"edit this" 
+	set $@howManyItems, 10;		// input the item number to be distribute. 
+						// Max 100 value
+//********DONT TOUCH ANYTHING AFTER THIS*********//
+		set $@checkActive$, "Active";
+		for( set .@i, 0; .@i < $@howManyItems; set .@i, .@i +1 ) {
+			attachrid(getcharid(3,'partymembername$[.@i]));
+				setarray $@itemNumbers[.@i], groupranditem(IG_Cherish_Box);
+				setarray $@giveItemID[.@i], $@itemNumbers[.@i];
+			detachrid;
+		}
+		
+		copyarray 'giveItemID[0],$@giveItemID[0], getarraysize($@giveItemID);
+		copyarray 'itemNumbers[0],$@itemNumbers[0], getarraysize($@itemNumbers);
+end;
+
+//timer invoked
+OnDoneQuest:
+for ( set .@i, 0; .@i < 'partycount; set .@i, .@i +1 ){
+	if ( isloggedin('partyaid[.@i]) ){
+	attachrid(getcharid(3,'partymembername$[.@i]));
+		// see this... only invoked time to those whos in the current event map only
+			// attach timer to the npc Boarder
+			initnpctimer 'partyaid[.@i];
+			message 'partymembername$[.@i], strcharinfo(1) + ": the 3 minutes timer has now started";
+	detachrid;
+	}
+}
+// start timer
+startnpctimer;
+end;
+
+OnTimer180000:
+stopnpctimer;
+// display only to the character who is attached to
+for ( set .@i, 0; .@i < 'partycount; set .@i, .@i +1 ){
+	if ( isloggedin('partyaid[.@i]) ){
+		getpartymember(getcharid(1));
+		// see this... only invoked time to those whos in the current event map only
+		if (has_instance("1@stage") != "") {
+			attachrid(getcharid(3,'partymembername$[.@i]));
+			message 'partymembername$[.@i], strcharinfo(1) + ": 3 minutes have passed!";
+			//instance_destroy;
+			detachrid;
+		}
+	}
+}	
+sleep2 2000;
+detachnpctimer;
+//warpparty "prontera",155,180,getcharid(1);
+instance_destroy ('instid);
+end;
+
+//stop timer invoked
+OnStopTimer:
+	stopnpctimer;
+	detachnpctimer;
+	
+for ( set .@i, 0; .@i < 'partycount; set .@i, .@i +1 ){
+	if ( isloggedin('partyaid[.@i]) ){
+		attachrid(getcharid(3,'partymembername$[.@i]));		
+			instance_destroy;
+		detachrid;
+	}
+}
+
+end;
+}
+
+1@stage,58,64,0	script	#Boarder2	70,{
+
+}
+
+1@stage,56,69,4	script	Healer Angeling#Stage	1096,2,2,{
+
+OnInstanceInit:
+OnTouch:
+    if (Hp == MaxHp && Sp == MaxSp) {
+    end;
+    }
+    npctalk "Heal !!";
+    skilleffect 28,9999;
+    percentheal 100,100;
+	atcommand "#item " + strcharinfo(0) + " 7139" ; // Glistering Coat for FCP
+    sc_start SC_ANGELUS,600000,10; // Angelus lvl 10
+    sc_start SC_BLESSING,600000,10; // Blessing lvl 10
+    sc_start SC_INCREASEAGI,600000,10; // Increase agi lvl 10
+    sc_start SC_IMPOSITIO,600000,5; // Impositio manus lvl 5
+    sc_start SC_SUFFRAGIUM,600000,3; // Suffragium lvl 3
+    sc_start SC_MAGNIFICAT,600000,5; // Magnificat lvl 10
+    sc_start SC_WINDWALK,600000,10; // Wind walk lvl 10
+    sc_start SC_NEN,600000,5; // Soul ninja skill lvl 5
+    sc_start SC_CONCENTRATION,600000,10; // Improve Concentration lvl 10
+    atcommand "@useskill 479 5 " +strcharinfo(0); // Full chemical protection lvl 5
+    end;
+end;
+end;
+}
+
+1@stage	mapflag	noexp
+1@stage	mapflag	nobranch
+1@stage	mapflag	nomemo
+1@stage	mapflag	nopenalty	// disable exp loss
+1@stage	mapflag	noreturn
+1@stage	mapflag	nosave	SavePoint
+1@stage	mapflag	noteleport
+1@stage	mapflag	nowarp
+1@stage	mapflag	nowarpto
+1@stage	mapflag	nomobloot	// disable monster drop loots,
+1@stage	mapflag	nomvploot	// 2 of these
+1@stage	mapflag	nocommand	60
+1@stage	mapflag	partylock
+1@stage	mapflag	loadevent

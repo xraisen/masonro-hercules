@@ -973,7 +973,7 @@ OnStartNPC:
 		set .@parentNodePtr$, .buildStack$[.stackLevel - 1];
 		
 		//add to parent node
-		setd(.@parentNodePtr$ + "[1]", getd(.@parentNodePtr$ + "[1]") + "Last Warp" + ":");
+		//setd(.@parentNodePtr$ + "[1]", getd(.@parentNodePtr$ + "[1]") + "Last Warp" + ":");
 		setd(.@parentNodePtr$ + "[" + getarraysize(getd(.@parentNodePtr$)) + "]", .mapOffset);
 
 		//infinte loop check

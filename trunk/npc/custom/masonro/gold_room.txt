@@ -32,7 +32,7 @@ ordeal_1-2	mapflag	nocommand	99
 //ordeal_1-2	mapflag	restricted	1
 //=================================================
 
-ordeal_1-2,0,0,0	script	golds Room	-1,{
+ordeal_1-2,0,0,0	script	Golds Room	-1,{
 
 OnInit:
 //No. of Mine Guardian.
@@ -167,7 +167,7 @@ end;
 //===============================================
 //warper
 //===============================================
-ordeal_1-2,154,156,5	script	golds Miner	813,{
+ordeal_1-2,154,156,5	script	Golds Miner	813,{
 	mes "[golds Miner]";
 	mes "Want to go now?";
 	 if(select("Yes", "No") == 1) {
@@ -177,7 +177,7 @@ ordeal_1-2,154,156,5	script	golds Miner	813,{
 	close;
 }
 
-eden_in01,267,307,5	script	golds Room Warper	813,{
+eden_in01,267,307,5	script	Golds Room Warper	813,{
 	callfunc "goldsmain";
 	end;
 

@@ -40,7 +40,7 @@ OnInit:
 	set .guardian,50;
 
 //Type of guardian. 0 = normal 1 = extreme
-	set .@guardiantype,0;
+	set .@guardiantype,1;
 
 	if(.@guardiantype == 0){
 		monster "ordeal_1-2",0,0,"Guard Pacific",1949,.guardian,"";
@@ -80,7 +80,7 @@ OnNPCKillEvent:
 	set .@showservername,1;
 
 //Name of your Server
-	set .@servername$,"[The Quality Maker]";
+	set .@servername$,"[MasonRO]";
 
 //=========================================================================================
 
@@ -330,18 +330,18 @@ ordeal_1-2,202,129,0	warp	ord509	1,1,prontera,173,160
 ordeal_1-2,105,154,0	warp	ord510	1,1,prontera,173,160
 
 //============Spawns=================
-ordeal_1-2,0,0,0,0	monster	goldsen Pecopeco	1369,500,40000,20000,0
-ordeal_1-2,0,0,0,0	monster	goldsen Pecopeco	1369,400,40000,20000,0
-ordeal_1-2,0,0,0,0	monster	goldsen Pecopeco	1369,300,40000,20000,0
-ordeal_1-2,0,0,0,0	monster	goldsen Pecopeco	1369,200,40000,20000,0
-ordeal_1-2,0,0,0,0	monster	goldsen Pecopeco	1369,100,40000,20000,0
-ordeal_1-2,0,0,0,0	monster	goldsen Pecopeco	1369,500,40000,20000,0
-ordeal_1-2,0,0,0,0	monster	goldsen Pecopeco	1369,400,40000,20000,0
-ordeal_1-2,0,0,0,0	monster	goldsen Pecopeco	1369,300,40000,20000,0
-ordeal_1-2,0,0,0,0	monster	goldsen Pecopeco	1369,200,40000,20000,0
-ordeal_1-2,0,0,0,0	monster	goldsen Pecopeco	1369,100,40000,20000,0
-ordeal_1-2,0,0,0,0	monster	goldsen Pecopeco	1369,500,40000,20000,0
-ordeal_1-2,0,0,0,0	monster	goldsen Pecopeco	1369,400,40000,20000,0
-ordeal_1-2,0,0,0,0	monster	goldsen Pecopeco	1369,300,40000,20000,0
-ordeal_1-2,0,0,0,0	monster	goldsen Pecopeco	1369,200,40000,20000,0
-ordeal_1-2,0,0,0,0	monster	goldsen Pecopeco	1369,100,40000,20000,0
+ordeal_1-2,0,0,0,0	monster	Goldsen Pecopeco	1369,500,40000,20000,0
+ordeal_1-2,0,0,0,0	monster	Goldsen Pecopeco	1369,400,40000,20000,0
+ordeal_1-2,0,0,0,0	monster	Goldsen Pecopeco	1369,300,40000,20000,0
+ordeal_1-2,0,0,0,0	monster	Goldsen Pecopeco	1369,200,40000,20000,0
+ordeal_1-2,0,0,0,0	monster	Goldsen Pecopeco	1369,100,40000,20000,0
+ordeal_1-2,0,0,0,0	monster	Goldsen Pecopeco	1369,500,40000,20000,0
+ordeal_1-2,0,0,0,0	monster	Goldsen Pecopeco	1369,400,40000,20000,0
+ordeal_1-2,0,0,0,0	monster	Goldsen Pecopeco	1369,300,40000,20000,0
+ordeal_1-2,0,0,0,0	monster	Goldsen Pecopeco	1369,200,40000,20000,0
+ordeal_1-2,0,0,0,0	monster	Goldsen Pecopeco	1369,100,40000,20000,0
+ordeal_1-2,0,0,0,0	monster	Goldsen Pecopeco	1369,500,40000,20000,0
+ordeal_1-2,0,0,0,0	monster	Goldsen Pecopeco	1369,400,40000,20000,0
+ordeal_1-2,0,0,0,0	monster	Goldsen Pecopeco	1369,300,40000,20000,0
+ordeal_1-2,0,0,0,0	monster	Goldsen Pecopeco	1369,200,40000,20000,0
+ordeal_1-2,0,0,0,0	monster	Goldsen Pecopeco	1369,100,40000,20000,0

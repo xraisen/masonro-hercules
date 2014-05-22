@@ -6,7 +6,7 @@
 ///_/    /_/ /_/  \____/      \_______/ \____/  \____/ /_/ /_/   /_/    \__/     /_//_///  \____/ /_/ \_\ \____/ /_/
 //=============================================================================
 //
-//   golds Room Advance Script - Mining golds for wealth - Please Leave Credit   \\
+//   Golds Room Advance Script - Mining Golds for wealth - Please Leave Credit   \\
 //=============================================================================
 //POWERED by: rudolp
 //[The Quality Maker]
@@ -14,8 +14,8 @@
 //Please Report any bug and suggestions.
 //===== Compatible With: =================================================================
 //= Any eAthena Version
-//=============golds Room Settings===================
-//This should always be enable for a better golds Room System.
+//=============Golds Room Settings===================
+//This should always be enable for a better Golds Room System.
 //==================================================
 ordeal_1-2	mapflag	noskill
 ordeal_1-2	mapflag	nomemo
@@ -36,7 +36,7 @@ ordeal_1-2,0,0,0	script	Golds Room	-1,{
 
 OnInit:
 //No. of Mine Guardian.
-//For goldsen peko it is default to 100 and 4 seconds~2 seconds spawn rate.
+//For Goldsen peko it is default to 100 and 4 seconds~2 seconds spawn rate.
 	set .guardian,50;
 
 //Type of guardian. 0 = normal 1 = extreme
@@ -52,20 +52,20 @@ end;
 OnNPCKillEvent:
 //===== Configurations: ========================================================================
 
-//Max golds can a player get after killing 1 goldsen peko (default 5 note:this will increase if luk bonus is enable).
-	set .@maxgaingolds,5;
+//Max Golds can a player get after killing 1 Goldsen peko (default 5 note:this will increase if luk bonus is enable).
+	set .@maxgainGolds,5;
 
-//Apply golds penalty. 0 = no 1 = yes
+//Apply Golds penalty. 0 = no 1 = yes
 	set .@penalty1,1;
 
-//The Maximum no. of golds Penalty.
+//The Maximum no. of Golds Penalty.
 	set .@maxpenalty1,3;
 
 //Apply speed & HP penalty. 0 = no 1 = yes 
 	set .@penalty2,1;
 
-//golds limitation penalty must be enable
-	set .@maxgolds,200;
+//Golds limitation penalty must be enable
+	set .@maxGolds,200;
 
 //The maximum no. of hp penalty by %.
 	set .@maxpenalty2,10;
@@ -89,14 +89,14 @@ if (getmapxy(@mapname$,@mapx,@mapy,0) == -1) goto L_Finish;
 if (@mapname$ == "ordeal_1-2"){
 	set @bonus,0;
 	set @deduction,0;
-	set @gain,rand (.@maxgaingolds);
+	set @gain,rand (.@maxgainGolds);
 
 //Luk bonus
 	if (.@lukbonus != 0){
 		set @bonus,readparam(bLuk)/.@lukdiv;
 	}
 
-//golds Penalty
+//Golds Penalty
 	if (.@penalty1 != 0){
 		set @deduction,rand(.@maxpenalty1);
 		if(@deduction == 0) set @deduction,1;	
@@ -104,22 +104,22 @@ if (@mapname$ == "ordeal_1-2"){
 
 	set @gain, @gain + @bonus - @deduction;
 	if (getgmlevel() > 40) {
-	dispbottom "GMs cant gain a golds, access to the site is for debugging purposes only.";	
+	dispbottom "GMs cant gain a Golds, access to the site is for debugging purposes only.";	
 	}
 	else {
-	set golds, golds + @gain ;
+	set Golds, Golds + @gain ;
 	}
 	
-//Displaying Gained golds
+//Displaying Gained Golds
 	if(.@showservername != 0){
-		if(golds%5 == 0){ //Show Server Name every 10 golds gain.
+		if(Golds%5 == 0){ //Show Server Name every 10 Golds gain.
 			dispbottom "===============Brought to you by===============";
 			dispbottom "==============" + .@servername$ +"==============";
 		}
 	}
 
 	if(@gain){
- 		dispbottom "-|You got: " +@gain+ " golds| - |Total: " +golds+ " golds|- ";
+ 		dispbottom "-|You got: " +@gain+ " Golds| - |Total: " +Golds+ " Golds|- ";
 
 	}else{
 		dispbottom "-|You got: NOTHING! |- ";
@@ -128,9 +128,9 @@ if (@mapname$ == "ordeal_1-2"){
 
 
 	if (.@penalty2 != 0){
-		if (golds >= .@maxgolds/2 && golds <=.@maxgolds/2+20){
+		if (Golds >= .@maxGolds/2 && Golds <=.@maxGolds/2+20){
 			 sc_start	SC_DECREASEAGI,240000,10;	 	
-		}else if(golds >.@maxgolds){
+		}else if(Golds >.@maxGolds){
 			sc_start	SC_CURSE,240000,10;
 		 	percentheal (.@maxpenalty2*-1),(.@maxpenalty2*-1);
 		 	heal -50,0; //For him to die
@@ -140,7 +140,7 @@ if (@mapname$ == "ordeal_1-2"){
 	if(paid == 0){
 		mapannounce "ordeal_1-2"," x( "+strcharinfo(0)+" is a cheater!",bc_map;
 		dispbottom "Go out you bastard!";
-		set golds,0;
+		set Golds,0;
 		warp "eden_in01",268,309;
 	}
 		end;
@@ -152,7 +152,7 @@ OnPCDieEvent:
 if (getmapxy(@mapname$,@mapx,@mapy,0) == -1) goto L_Finish;
 if (@mapname$ == "ordeal_1-2"){
 		dispbottom "Holy Shit you died!";
-		dispbottom "All of your golds will gone!";
+		dispbottom "All of your Golds will gone!";
 		set alive, 0;
 		set paid, 0;
 		end;
@@ -168,7 +168,7 @@ end;
 //warper
 //===============================================
 ordeal_1-2,154,156,5	script	Golds Miner	813,{
-	mes "[golds Miner]";
+	mes "[Golds Miner]";
 	mes "Want to go now?";
 	 if(select("Yes", "No") == 1) {
 		set alive,1;
@@ -178,19 +178,19 @@ ordeal_1-2,154,156,5	script	Golds Miner	813,{
 }
 
 eden_in01,267,307,5	script	Golds Room Warper	813,{
-	callfunc "goldsmain";
+	callfunc "Goldsmain";
 	end;
 
 	
 OnClock0910:
 OnClock1910:	
-	announce "golds Room is open for 1 hour to the public!",bc_blue;
-	set .opengoldsroom,0;
+	announce "Golds Room is open for 1 hour to the public!",bc_blue;
+	set .openGoldsroom,0;
 end;
 
 OnClock1010:
 OnClock2010:
-	mapannounce "ordeal_1-2","It's time to close the golds Room for a while",bc_map;
+	mapannounce "ordeal_1-2","It's time to close the Golds Room for a while",bc_map;
 	sleep2 5000;
 	mapannounce "ordeal_1-2","Please settle your things and move quitely in 1 min.",bc_map;	
 	sleep2 5000;
@@ -199,30 +199,30 @@ end;
 
 OnClock1011:
 OnClock2011:
-	announce "golds Room is now close to the public!",bc_blue;
+	announce "Golds Room is now close to the public!",bc_blue;
 	sleep2 5000;
-	announce "golds Room will open again after 8 hours.",bc_blue;		
-	set .opengoldsroom,1;
+	announce "Golds Room will open again after 8 hours.",bc_blue;		
+	set .openGoldsroom,1;
 	mapwarp "ordeal_1-2","eden_in01",268,309;
 end;
 }
 
-function	script	goldsmain	{
+function	script	Goldsmain	{
 
-set .opengoldsroom, getvariableofnpc(.opengoldsroom,"golds Room Warper");
+set .openGoldsroom, getvariableofnpc(.openGoldsroom,"Golds Room Warper");
 
 	if (getgmlevel() < 90) {
-		if(.opengoldsroom == 0)
+		if(.openGoldsroom == 0)
 			goto start;			
 		else {
-			mes "[golds Room Warper]";
+			mes "[Golds Room Warper]";
 			mes "Sorry!";
 			mes "The Mining Site is closed.";
 			close;
 		}
 	}
 	if (getgmlevel() >= 90){
-		mes "[golds Room Warper]";
+		mes "[Golds Room Warper]";
 	if(Sex != 0){
 		mes "Hello " + strcharinfo(0) + " what can I do for you?";
 	}else{
@@ -232,46 +232,46 @@ set .opengoldsroom, getvariableofnpc(.opengoldsroom,"golds Room Warper");
 	next;
 	menu "Enter Mining Site",start,"Please close the mine Site. Now!",-,"Please Open the mine Site. Now!",G_open,"Nothing",C_s;
 	next;
-	mes "[golds Room Warper]";
+	mes "[Golds Room Warper]";
 	mapannounce "ordeal_1-2","Excuse me Miners.",bc_map;
 	mes "Ok.";
 	next;
-	mapannounce "ordeal_1-2",strcharinfo(0) +" wants to close the golds Room for a while",bc_map;
+	mapannounce "ordeal_1-2",strcharinfo(0) +" wants to close the Golds Room for a while",bc_map;
 	mes "Just a second I will just ask them to";
 	mes "go out in the mining site";
 	next;
 	mapannounce "ordeal_1-2","Please settle your things and move quitely",bc_map;
-	mes "[golds Room Warper]";
+	mes "[Golds Room Warper]";
 	mes ".............";
 	mes "........";
 	next;
-	mes "[golds Room Warper]";
+	mes "[Golds Room Warper]";
 	mes "Ok your done";
-	set .opengoldsroom,1;
+	set .openGoldsroom,1;
 	mapwarp "ordeal_1-2","eden_in01",268,309;
 	close;
 	}
 
 G_open:
-	mes "[golds Room Warper]";
+	mes "[Golds Room Warper]";
 	mes "Ok.";
 	mes "Mining Site is Already Available.";
-	announce "golds Room is open for 1 hour to the public!",bc_blue;
-	set .opengoldsroom,0;
+	announce "Golds Room is open for 1 hour to the public!",bc_blue;
+	set .openGoldsroom,0;
 	close;
 
 start:
 	if ( alive == 0){
-		set golds,0;
+		set Golds,0;
 	}
-	mes "[golds Room Warper]";
+	mes "[Golds Room Warper]";
 	mes "What do you want?";
 	next;
-	menu "To the golds Room",-,"Exchange golds",exchange,"Nothing",C_s;
-	mes "[golds Room Warper]";
+	menu "To the Golds Room",-,"Exchange Golds",exchange,"Nothing",C_s;
+	mes "[Golds Room Warper]";
 	mes "Hmm..";
 	mes "It cost 100,000z";
-    	mes "Would you like to go now to the golds room?";
+    	mes "Would you like to go now to the Golds room?";
     	if(select("Yes", "No") == 1) {
 		if (Zeny < 100000) goto nomoney;
 		set Zeny, Zeny - 100000;
@@ -284,28 +284,28 @@ start:
     	}
     	close;
 nomoney:
-	mes "[golds Room Warper]";
+	mes "[Golds Room Warper]";
 	mes "Sorry insufficient balance";
 	close;
 exchange:
-	mes "[golds Room Warper]";
+	mes "[Golds Room Warper]";
 	mes "Hmm...let me see";
-	if (golds == 0) 
-		set golds, 0;
-	mes "You have " +golds+ ".";
-	if (golds == 0) goto nogolds; 
+	if (Golds == 0) 
+		set Golds, 0;
+	mes "You have " +Golds+ ".";
+	if (Golds == 0) goto noGolds; 
 	mes "Ok get this.";
 	next;
-        if (checkweight(969,golds) == 0) goto L_OverWeight;
-	getitem 969, golds;
-	set golds, 0;
+        if (checkweight(969,Golds) == 0) goto L_OverWeight;
+	getitem 969, Golds;
+	set Golds, 0;
 	emotion e_gg;
 	close;
 L_OverWeight:
-	mes "[golds Room Warper]";
+	mes "[Golds Room Warper]";
 	mes "Sorry your overweight";
 	close;
-nogolds:
+noGolds:
 	close;
 C_s:
 	close;

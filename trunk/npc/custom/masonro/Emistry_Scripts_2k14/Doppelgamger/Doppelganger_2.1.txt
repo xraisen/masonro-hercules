@@ -126,6 +126,7 @@ do{
 		message strcharinfo(0),"NEW CLASSES";
 		jobchange 0;
 		resetlvl 1;
+		resetstatus;
 		mes "[Doppelganger]";
 		mes "It is done. Thank you!";
 		break;

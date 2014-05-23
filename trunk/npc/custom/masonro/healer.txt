@@ -35,10 +35,10 @@ heal_buff:
     npctalk "Heal!!";
     skilleffect 28,9999;
     percentheal 100,100;
-	atcommand "#item " + strcharinfo(0) + " 7139" ; // Glistering Coat for FCP
+	//atcommand "#item " + strcharinfo(0) + " 7139" ; // Glistering Coat for FCP
 	sc_start SC_NJ_NEN,600000,5; // Soul ninja skill lvl 5
 	sc_start SC_WINDWALK,600000,10; // Wind walk lvl 10
-	atcommand "@useskill 479 5 " +strcharinfo(0); // Full chemical protection lvl 5
+	//atcommand "@useskill 479 5 " +strcharinfo(0); // Full chemical protection lvl 5
 	sc_start SC_CONCENTRATION,600000,10; // Improve Concentration lvl 10
 	sc_start SC_BLESSING,600000,10; // Blessing lvl 10
     sc_start SC_ANGELUS,600000,10; // Angelus lvl 10
@@ -59,15 +59,15 @@ info:
 	mes "The buff I can give you for 10 mins is as follows:";
 	mes "1.) Ninja Nen lvl 5";
 	mes "2.) Wind Walk lvl 10";
-	mes "3.) Full Chemical Protection lvl 5";
-	mes "5.) Improve Concentration lvl 10";
-	mes "6.) Blessing lvl 10";
-	mes "7.) Angelus lvl 10";
-	mes "8.) Imposito lvl 5";
-	mes "9.) Suffragium lvl 3";
-	mes "10.) Magnificat lvl 10";
-	mes "11.) Increase Agi lvl 10";
-	mes "12.) Soul Link lvl 10";	
+	//mes "3.) Full Chemical Protection lvl 5";
+	mes "3.) Improve Concentration lvl 10";
+	mes "4.) Blessing lvl 10";
+	mes "5.) Angelus lvl 10";
+	mes "6.) Imposito lvl 5";
+	mes "7.) Suffragium lvl 3";
+	mes "8.) Magnificat lvl 10";
+	mes "9.) Increase Agi lvl 10";
+	mes "10.) Soul Link lvl 10";	
 close;
 
 }

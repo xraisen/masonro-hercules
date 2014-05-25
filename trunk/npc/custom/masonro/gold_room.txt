@@ -178,33 +178,41 @@ ordeal_1-2,154,156,5	script	Golds Miner	813,{
 }
 
 eden_in01,267,307,5	script	Golds Room Warper	813,{
+
+mes "[Golds Room]";
+mes "Due to the low of demands, Gold Room is now close.";
+close2;
+emotion 28, 0;
+
+end;
+ 
 	callfunc "Goldsmain";
 	end;
 
 	
-OnClock0910:
-OnClock1910:	
-	announce "Golds Room is open for 1 hour to the public!",bc_blue;
-	set .openGoldsroom,0;
-end;
+// OnClock0910:
+// OnClock1910:	
+	// announce "Golds Room is open for 1 hour to the public!",bc_blue;
+	// set .openGoldsroom,0;
+// end;
 
-OnClock1010:
-OnClock2010:
-	mapannounce "ordeal_1-2","It's time to close the Golds Room for a while",bc_map;
-	sleep2 5000;
-	mapannounce "ordeal_1-2","Please settle your things and move quitely in 1 min.",bc_map;	
-	sleep2 5000;
-	mapwarp "ordeal_1-2","eden_in01",268,309;
-end;
+// OnClock1010:
+// OnClock2010:
+	// mapannounce "ordeal_1-2","It's time to close the Golds Room for a while",bc_map;
+	// sleep2 5000;
+	// mapannounce "ordeal_1-2","Please settle your things and move quitely in 1 min.",bc_map;	
+	// sleep2 5000;
+	// mapwarp "ordeal_1-2","eden_in01",268,309;
+// end;
 
-OnClock1011:
-OnClock2011:
-	announce "Golds Room is now close to the public!",bc_blue;
-	sleep2 5000;
-	announce "Golds Room will open again after 8 hours.",bc_blue;		
-	set .openGoldsroom,1;
-	mapwarp "ordeal_1-2","eden_in01",268,309;
-end;
+// OnClock1011:
+// OnClock2011:
+	// announce "Golds Room is now close to the public!",bc_blue;
+	// sleep2 5000;
+	// announce "Golds Room will open again after 8 hours.",bc_blue;		
+	// set .openGoldsroom,1;
+	// mapwarp "ordeal_1-2","eden_in01",268,309;
+// end;
 }
 
 function	script	Goldsmain	{

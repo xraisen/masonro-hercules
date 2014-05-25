@@ -78,7 +78,7 @@ StepTwo:
 					}
 				}
 				if (.@getCoin >= 10) {
-					delitem 26000,10;
+					delitem 23007,10;
 					mes "[^FF9900Invasion Goblin Starter^000000]";
 					mes "Thank you for the sponsorship. You will be recieving a 1,000 a free cash points and a 5 Poring coin.";
 					next;
@@ -111,7 +111,7 @@ StepTwo:
 					}
 				}
 				if (.@getCoin >= 10) {
-					delitem 26000,10;
+					delitem 23007,10;
 					mes "[^FF9900Invasion Goblin Starter^000000]";
 					mes "Thank you for the sponsorship. You will be recieving a 1,000 a free cash points and a 5 Poring coin.";
 					next;

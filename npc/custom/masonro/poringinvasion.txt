@@ -26,7 +26,7 @@ eden_in01,315,34,4	script	Poring Invasion	909,{
 			}
 		}
 		if (.@getCoin >= 10) {
-			delitem 26000,10;
+			delitem 23007,10;
 			mes "[^FF9900Poring Invasion Starter^000000]";
 			mes "Thank you for the sponsorship. You will be recieving a 1,000 a free cash points and a 5 Poring coin.";
 			next;
@@ -59,7 +59,7 @@ eden_in01,315,34,4	script	Poring Invasion	909,{
 			}
 		}
 		if (.@getCoin >= 10) {
-			delitem 26000,10;
+			delitem 23007,10;
 			mes "[^FF9900Poring Invasion Starter^000000]";
 			mes "Thank you for the sponsorship. You will be recieving a 1,000 a free cash points and a 5 Poring coin.";
 			next;
